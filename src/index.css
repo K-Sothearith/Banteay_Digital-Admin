@@ -1,0 +1,74 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --brand-navy: #012475;
+    --brand-cyber-blue: #4b9efe;
+    --brand-light: #fbfbfb;
+    --brand-surface-light: #ffffff;
+    --brand-dark: #070d1e;
+    --brand-surface-dark: #0c1733;
+    --brand-card-dark: #101e40;
+    --brand-border-dark: #1e3568;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #fbfbfb;
+    color: #1e293b;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body,
+  html.dark body {
+    background-color: #070d1e;
+    color: #f1f5f9;
+  }
+}
+
+/* Custom Dropdown menu item rule per Development Handbook:
+   "Dropdown menu items have rounded border and the items as a whole is margin by 5px to the bottom of the dropdown button" */
+.custom-dropdown-menu {
+  margin-top: 5px !important;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(1, 36, 117, 0.12), 0 8px 10px -6px rgba(1, 36, 117, 0.08);
+}
+
+.dark .custom-dropdown-menu {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+.custom-dropdown-item {
+  border-radius: 0.5rem;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Smooth Cyber Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(75, 158, 254, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(75, 158, 254, 0.5);
+}
+
+/* Cyber card glowing accent */
+.cyber-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.cyber-card:hover {
+  border-color: rgba(75, 158, 254, 0.4);
+}

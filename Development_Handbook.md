@@ -127,7 +127,7 @@ Include:
 - Banteay Digital branding
 - `Admin Login` heading
 - Email input
-- Password input
+- Password input with show and hide password button
 - Login button
 - Optional `Forgot Password?` visual link
 
@@ -210,7 +210,7 @@ Changing the dropdown should update the mock chart data.
 
 ## Report Distribution
 
-Use a pie or donut chart.
+Use a donut chart.
 
 Title:
 `Report Distribution`
@@ -557,6 +557,11 @@ Design direction:
 - Minimal without feeling empty
 - Suitable for a digital safety platform
 
+Theme: 
+- The color scheme should be based on the logo.
+Primary Color: #012475, #fbfbfb, #4b9efe  
+Secondary Color: You choose as long as it fits  
+
 Use:
 
 - Rounded cards
@@ -568,6 +573,7 @@ Use:
 - Modern form controls
 - Good hover/focus states
 - Smooth but subtle transitions
+- Dropdown menu items have rounded border and the items as a whole is margin by 5px to the bottom of the dropdown button 
 
 Support both light mode and dark mode.
 

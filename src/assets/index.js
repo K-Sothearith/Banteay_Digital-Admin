@@ -12,6 +12,8 @@ import LightMode_Icon from './icons/Light_Mode.svg';
 import DarkMode_Icon from './icons/Dark_Mode.svg';
 import AuditLog_Icon from './icons/Audit_Log.svg';
 
+const Language_Icon = Langauage_Icon;
+
 // ------------------------- Export ------------------------------------
 export {
     // Logo
@@ -23,6 +25,7 @@ export {
     ReportManagement_Icon,
     Users_Icon,
     Langauage_Icon,
+    Language_Icon,
     LightMode_Icon,
     DarkMode_Icon,
     AuditLog_Icon
@@ -39,6 +42,7 @@ export default {
     ReportManagement_Icon,
     Users_Icon,
     Langauage_Icon,
+    Language_Icon,
     LightMode_Icon,
     DarkMode_Icon,
     AuditLog_Icon
