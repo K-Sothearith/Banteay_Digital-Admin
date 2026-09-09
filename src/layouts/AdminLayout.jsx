@@ -22,7 +22,7 @@ export const AdminLayout = ({ children }) => {
         <Navbar />
 
         {/* Dynamic Page Content */}
-        <main className="px-6 flex-1 max-w-7xl w-full mx-auto flex flex-col">
+        <main className="px-6 flex-1 max-w-7xl w-full mx-auto flex flex-col mt-2">
           {children}
         </main>
       </div>
