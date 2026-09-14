@@ -11,7 +11,7 @@ export const Users = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [sortBy, setSortBy] = useState('reports');
 
-  const statusTabs = ['All', 'Active', 'Suspended', 'Pending'];
+  const statusTabs = ['All', 'Active', 'Suspended', 'Banned'];
 
   const sortOptions = [
     { value: 'reports', label: 'Sort: Most Reports' },

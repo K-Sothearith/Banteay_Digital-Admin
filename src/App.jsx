@@ -10,20 +10,38 @@ import Users from './pages/Users';
 import AuditLog from './pages/AuditLog';
 
 const AppRoutes = () => {
-  const { currentPath, isAuthenticated, navigateTo } = useAdmin();
+  const { currentPath, isAuthenticated, authReady, navigateTo } = useAdmin();
 
   // Redirect root or empty path to /admin/dashboard
   useEffect(() => {
+    if (!authReady) return;
     if (currentPath === '/' || currentPath === '') {
       navigateTo(isAuthenticated ? '/admin/dashboard' : '/admin/login');
+    } else if (currentPath === '/admin/login' && isAuthenticated) {
+      navigateTo('/admin/dashboard');
+    } else if (currentPath !== '/admin/login' && !isAuthenticated) {
+      navigateTo('/admin/login');
     }
     window.scrollTo(0, 0);
-  }, [currentPath, isAuthenticated, navigateTo]);
+  }, [authReady, currentPath, isAuthenticated, navigateTo]);
+
+  if (!authReady) {
+    return (
+      <div className="min-h-screen bg-[#fbfbfb] dark:bg-[#070d1e] flex items-center justify-center text-[#012475] dark:text-[#4b9efe]">
+        <div className="flex items-center gap-3 text-sm font-bold">
+          <i className="fa-solid fa-shield-halved fa-pulse text-xl"></i>
+          <span>Verifying administrator session…</span>
+        </div>
+      </div>
+    );
+  }
 
   // Login page has its own standalone full-screen layout
   if (currentPath === '/admin/login') {
     return <Login />;
   }
+
+  if (!isAuthenticated) return null;
 
   // All other pages are rendered inside the AdminLayout
   const renderCurrentPage = () => {

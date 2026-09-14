@@ -3,20 +3,22 @@ import { useAdmin } from '../context/useAdmin';
 import { BanteayDigital_Logo } from '../assets';
 
 export const Login = () => {
-  const { login, navigateTo } = useAdmin();
-  const [email, setEmail] = useState('admin@banteay.digital');
-  const [password, setPassword] = useState('BanteaySecure2026!');
+  const { login, navigateTo, error, clearError } = useAdmin();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      login(email, password);
+    clearError();
+    try {
+      const result = await login(email, password);
+      if (result.success) navigateTo('/admin/dashboard');
+    } finally {
       setIsLoading(false);
-      navigateTo('/admin/dashboard');
-    }, 400);
+    }
   };
 
   return (
@@ -58,6 +60,11 @@ export const Login = () => {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-2.5 text-xs font-semibold text-red-700 dark:border-red-900/50 dark:bg-red-950/30 dark:text-red-300">
+              {error}
+            </div>
+          )}
           {/* Email */}
           <div>
             <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1.5">

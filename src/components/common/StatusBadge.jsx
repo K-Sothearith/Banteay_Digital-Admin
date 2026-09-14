@@ -23,6 +23,7 @@ export const StatusBadge = ({ status, size = 'sm', className = '' }) => {
       case 'active':
         return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20';
       case 'suspended':
+      case 'banned':
         return 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20';
       case 'edited':
         return 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20';
@@ -41,6 +42,7 @@ export const StatusBadge = ({ status, size = 'sm', className = '' }) => {
       case 'rejected':
       case 'critical':
       case 'suspended':
+      case 'banned':
         return 'bg-red-500';
       case 'published':
         return 'bg-[#4b9efe]';

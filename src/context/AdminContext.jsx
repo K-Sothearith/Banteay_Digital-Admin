@@ -1,220 +1,312 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { BanteayDigital_Logo } from '../assets';
+import { api } from '../services/api';
+import authService from '../services/authService';
 import { AdminContext } from './createAdminContext';
-import {
-  initialStats,
-  scanActivityData,
-  reportDistributionData,
-  initialPendingReports,
-  initialManagedReports,
-  initialUsers,
-  userStats,
-  initialAuditLogs,
-  currentAdmin
-} from '../data/mockData';
+
+const emptyStats = { totalScans: 0, totalReports: 0, pendingReports: 0, approvedReports: 0 };
+const emptyActivity = {
+  week: Array.from({ length: 7 }, (_, index) => ({ label: `${index + 1}`, value: 0 })),
+  month: Array.from({ length: 30 }, (_, index) => ({ label: `${index + 1}`, value: 0 })),
+  year: Array.from({ length: 12 }, (_, index) => ({ label: `${index + 1}`, value: 0 })),
+};
+const emptyDistribution = [
+  { id: 'pending', name: 'Pending', count: 0, percent: '0%', color: '#f59e0b' },
+  { id: 'approved', name: 'Approved', count: 0, percent: '0%', color: '#10b981' },
+  { id: 'rejected', name: 'Rejected', count: 0, percent: '0%', color: '#ef4444' },
+];
+
+const displayName = (user, fallback = 'Unknown user') => user?.name || user?.email || user?.phoneNumber || fallback;
+const titleCase = (value = '') => value.toLowerCase().replace(/(^|_)([a-z])/g, (_match, prefix, letter) => `${prefix ? ' ' : ''}${letter.toUpperCase()}`);
+const formatDate = (value, options = { dateStyle: 'medium' }) => value
+  ? new Intl.DateTimeFormat('en', options).format(new Date(value))
+  : 'Not available';
+
+const inlineAvatar = (name) => {
+  const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase().replace(/[^A-Z0-9]/g, '') || 'BD';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="96" height="96" rx="20" fill="#012475"/><text x="48" y="57" text-anchor="middle" font-family="Arial" font-size="30" font-weight="700" fill="#fff">${initials}</text></svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+};
+
+const avatarFor = (user, fallbackName) => user?.avatarUrl || inlineAvatar(displayName(user, fallbackName));
+
+const riskFor = (assessment) => ({
+  STRONG_SCAM_INDICATORS: 'Critical',
+  SUSPICIOUS: 'High',
+  CAUTION: 'Medium',
+  INSUFFICIENT_EVIDENCE: 'Low',
+  NO_STRONG_WARNING_SIGNS: 'Low',
+  UNABLE_TO_ASSESS: 'Low',
+}[assessment] || 'Low');
+
+const reportView = (report) => {
+  const scan = report.scan || {};
+  const submitterName = displayName(report.user, 'Anonymous reporter');
+  const category = scan.scamCaseMatches?.[0]?.scamCase?.scamType || titleCase(scan.inputType || 'Scam report');
+  const status = report.communityPost ? 'Published' : titleCase(report.status);
+  return {
+    ...report,
+    title: report.title || `Scam report ${report.id.slice(-6)}`,
+    description: report.content || scan.normalizedInput || 'No report description was provided.',
+    category,
+    severity: riskFor(scan.assessment),
+    status,
+    aiResult: titleCase(scan.assessment || 'Pending analysis'),
+    confidence: Math.max(0, Math.min(100, Number(scan.score) || 0)),
+    evidenceImage: null,
+    publishedDate: report.communityPost?.publishedAt
+      ? `Published ${formatDate(report.communityPost.publishedAt)}`
+      : `Approved ${formatDate(report.reviewedAt)}`,
+    location: null,
+    submitter: {
+      name: submitterName,
+      avatar: avatarFor(report.user, submitterName),
+      time: formatDate(report.createdAt, { dateStyle: 'medium', timeStyle: 'short' }),
+      timestamp: formatDate(report.createdAt, { dateStyle: 'medium', timeStyle: 'short' }),
+    },
+  };
+};
+
+const userView = (user) => {
+  const name = displayName(user);
+  return {
+    ...user,
+    name,
+    email: user.email || user.phoneNumber || 'No contact information',
+    avatar: avatarFor(user, name),
+    reports: user.reportCount || 0,
+    published: user.publishedReportCount || 0,
+    joined: formatDate(user.createdAt),
+    status: titleCase(user.status),
+  };
+};
+
+const auditView = (log) => {
+  const occurredAt = new Date(log.occurredAt);
+  const elapsedMinutes = Math.max(0, Math.round((Date.now() - occurredAt.getTime()) / 60000));
+  const timeAgo = elapsedMinutes < 1 ? 'Just now'
+    : elapsedMinutes < 60 ? `${elapsedMinutes}m ago`
+      : elapsedMinutes < 1440 ? `${Math.floor(elapsedMinutes / 60)}h ago`
+        : `${Math.floor(elapsedMinutes / 1440)}d ago`;
+  return {
+    ...log,
+    admin: displayName(log.admin, 'Administrator'),
+    role: titleCase(log.admin?.role || 'ADMIN'),
+    timestamp: formatDate(log.occurredAt, { dateStyle: 'medium', timeStyle: 'short' }),
+    timeAgo,
+  };
+};
 
 export const AdminProvider = ({ children }) => {
-  // Theme state: dark mode vs light mode
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('bd-admin-theme');
-    if (saved) return saved === 'dark';
-    return false; // Default light mode as user requested #fbfbfb/#ffffff majority in light mode
-  });
+  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('bd-admin-theme') === 'dark');
+  const [language, setLanguage] = useState(() => localStorage.getItem('bd-admin-lang') || 'en');
+  const [admin, setAdmin] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [currentPath, setCurrentPath] = useState(() => window.location.pathname || '/admin/dashboard');
+  const [stats, setStats] = useState(emptyStats);
+  const [scanActivityData, setScanActivityData] = useState(emptyActivity);
+  const [reportDistributionData, setReportDistributionData] = useState(emptyDistribution);
+  const [pendingReports, setPendingReports] = useState([]);
+  const [managedReports, setManagedReports] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [userStats, setUserStats] = useState({ totalUsers: 0, submittedReports: 0, publishedReports: 0 });
+  const [auditLogs, setAuditLogs] = useState([]);
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('bd-admin-theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('bd-admin-theme', 'light');
-    }
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem('bd-admin-theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
-  const toggleTheme = () => setIsDarkMode(prev => !prev);
-
-  // Language state: 'en' | 'km'
-  const [language, setLanguage] = useState(() => {
-    return localStorage.getItem('bd-admin-lang') || 'en';
-  });
-
-  const changeLanguage = (lang) => {
-    setLanguage(lang);
-    localStorage.setItem('bd-admin-lang', lang);
-  };
-
-  // Auth state
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('bd-admin-auth') !== 'false';
-  });
-  const admin = currentAdmin;
-
-  const login = () => {
-    setIsAuthenticated(true);
-    localStorage.setItem('bd-admin-auth', 'true');
-    return true;
-  };
-
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.setItem('bd-admin-auth', 'false');
-    navigateTo('/admin/login');
-  };
-
-  // Client Routing State
-  const [currentPath, setCurrentPath] = useState(() => {
-    const path = window.location.pathname;
-    if (path === '/' || path === '') return '/admin/dashboard';
-    return path;
-  });
-
   useEffect(() => {
-    const handlePopState = () => {
-      setCurrentPath(window.location.pathname || '/admin/dashboard');
-    };
+    const handlePopState = () => setCurrentPath(window.location.pathname || '/admin/dashboard');
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigateTo = (path) => {
-    if (window.location.pathname !== path) {
-      window.history.pushState({}, '', path);
-    }
+  const navigateTo = useCallback((path) => {
+    if (window.location.pathname !== path) window.history.pushState({}, '', path);
     setCurrentPath(path);
     window.scrollTo(0, 0);
+  }, []);
+
+  const loadAdminData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [dashboard, pending, approved, userResponse, auditResponse] = await Promise.all([
+        api.admin.dashboard(),
+        api.admin.reports('PENDING'),
+        api.admin.reports('APPROVED'),
+        api.admin.users(),
+        api.admin.auditLogs(),
+      ]);
+      setStats(dashboard.stats);
+      setScanActivityData(dashboard.scanActivityData);
+      setReportDistributionData(dashboard.reportDistributionData);
+      setPendingReports(pending.reports.map(reportView));
+      setManagedReports(approved.reports.map(reportView));
+      setUsers(userResponse.users.map(userView));
+      setUserStats(userResponse.stats);
+      setAuditLogs(auditResponse.logs.map(auditView));
+      setError('');
+    } catch (requestError) {
+      setError(requestError.message);
+      throw requestError;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const initialize = async () => {
+      try {
+        const user = await authService.getCurrentUser();
+        if (user?.role !== 'ADMIN') {
+          return;
+        }
+        if (active) setAdmin(user);
+        await loadAdminData();
+      } catch (requestError) {
+        if (active && requestError.status !== 401) setError(requestError.message);
+      } finally {
+        if (active) setAuthReady(true);
+      }
+    };
+    initialize();
+    return () => { active = false; };
+  }, [loadAdminData]);
+
+  useEffect(() => {
+    const expireSession = () => {
+      setAdmin(null);
+      setAuthReady(true);
+      navigateTo('/admin/login');
+    };
+    window.addEventListener('bd:auth-expired', expireSession);
+    return () => window.removeEventListener('bd:auth-expired', expireSession);
+  }, [navigateTo]);
+
+  const login = async (email, password) => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const result = await authService.login(email, password);
+      if (!result.success) {
+        setError(result.message);
+        return result;
+      }
+      setAdmin(result.user);
+      await loadAdminData();
+      return result;
+    } catch (requestError) {
+      const message = requestError.message || 'Unable to sign in.';
+      setError(message);
+      return { success: false, message };
+    } finally {
+      setIsLoading(false);
+      setAuthReady(true);
+    }
   };
 
-  // Data states
-  const [pendingReports, setPendingReports] = useState(initialPendingReports);
-  const [managedReports, setManagedReports] = useState(initialManagedReports);
-  const users = initialUsers;
-  const [auditLogs, setAuditLogs] = useState(initialAuditLogs);
-  const [stats, setStats] = useState({
-    ...initialStats,
-    pendingReports: initialPendingReports.length
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch {
+      // Clear the local session even if the server is temporarily unavailable.
+    } finally {
+      setAdmin(null);
+      navigateTo('/admin/login');
+    }
+  };
+
+  const refreshDashboardAndAudit = async () => {
+    const [dashboard, auditResponse] = await Promise.all([api.admin.dashboard(), api.admin.auditLogs()]);
+    setStats(dashboard.stats);
+    setScanActivityData(dashboard.scanActivityData);
+    setReportDistributionData(dashboard.reportDistributionData);
+    setAuditLogs(auditResponse.logs.map(auditView));
+  };
+
+  const runAction = async (action) => {
+    setIsLoading(true);
+    setError('');
+    try {
+      await action();
+      return true;
+    } catch (requestError) {
+      setError(requestError.message || 'The action could not be completed.');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const approveReport = (reportId) => runAction(async () => {
+    const { report } = await api.admin.approveReport(reportId);
+    setPendingReports((current) => current.filter(({ id }) => id !== reportId));
+    setManagedReports((current) => [reportView(report), ...current]);
+    await refreshDashboardAndAudit();
   });
 
-  // Action: Add audit log entry
-  const addAuditLog = (action, reference, description) => {
-    const now = new Date();
-    const newLog = {
-      id: `LOG-${Date.now().toString().slice(-4)}`,
-      admin: admin.name,
-      role: admin.role,
-      action,
-      reference,
-      timeAgo: 'Just now',
-      timestamp: `${now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}, ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`,
-      description
-    };
-    setAuditLogs(prev => [newLog, ...prev]);
+  const rejectReport = (reportId, reason = 'Rejected after administrator review') => runAction(async () => {
+    await api.admin.rejectReport(reportId, reason);
+    setPendingReports((current) => current.filter(({ id }) => id !== reportId));
+    await refreshDashboardAndAudit();
+  });
+
+  const updateManagedReport = (updatedReport) => runAction(async () => {
+    const summary = updatedReport.description.trim().slice(0, 500);
+    const { report } = await api.admin.updateReport(updatedReport.id, {
+      title: updatedReport.title,
+      content: updatedReport.description,
+      ...(summary.length >= 10 && { summary }),
+    });
+    setManagedReports((current) => current.map((item) => item.id === report.id ? reportView(report) : item));
+  });
+
+  const publishManagedReport = (reportId) => runAction(async () => {
+    const report = managedReports.find(({ id }) => id === reportId);
+    if (!report || report.status === 'Published') return;
+    const content = report.description.trim();
+    const summary = content.slice(0, 500);
+    const response = await api.admin.publishReport(reportId, { title: report.title, summary, content });
+    setManagedReports((current) => current.map((item) => item.id === reportId ? reportView(response.report) : item));
+    await refreshDashboardAndAudit();
+  });
+
+  const contextValue = {
+    isDarkMode,
+    toggleTheme: () => setIsDarkMode((value) => !value),
+    language,
+    changeLanguage: (value) => { setLanguage(value); localStorage.setItem('bd-admin-lang', value); },
+    isAuthenticated: Boolean(admin),
+    authReady,
+    isLoading,
+    error,
+    clearError: () => setError(''),
+    admin: admin ? { ...admin, avatar: admin.avatarUrl || BanteayDigital_Logo, role: titleCase(admin.role) } : null,
+    login,
+    logout,
+    currentPath,
+    navigateTo,
+    stats,
+    scanActivityData,
+    reportDistributionData,
+    pendingReports,
+    managedReports,
+    users,
+    userStats,
+    auditLogs,
+    approveReport,
+    rejectReport,
+    updateManagedReport,
+    publishManagedReport,
+    refresh: loadAdminData,
   };
 
-  // Action: Approve Report
-  const approveReport = (reportId) => {
-    const report = pendingReports.find(r => r.id === reportId);
-    if (!report) return;
-
-    // Remove from pending
-    setPendingReports(prev => prev.filter(r => r.id !== reportId));
-
-    // Add to managed reports
-    const newManaged = {
-      id: report.id,
-      title: report.title,
-      author: 'Banteay Digital',
-      publishedDate: `Approved ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
-      timestamp: `${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}, ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`,
-      description: report.description,
-      evidenceImage: report.evidenceImage,
-      category: report.category,
-      severity: report.severity,
-      status: 'Approved',
-      location: report.submitter?.location || 'Cambodia'
-    };
-    setManagedReports(prev => [newManaged, ...prev]);
-
-    // Update stats
-    setStats(prev => ({
-      ...prev,
-      pendingReports: Math.max(0, prev.pendingReports - 1),
-      approvedReports: prev.approvedReports + 1
-    }));
-
-    // Log action
-    addAuditLog('Approved', report.id, `Approved report "${report.title.slice(0, 40)}..." after verification`);
-  };
-
-  // Action: Reject Report
-  const rejectReport = (reportId, reason = 'Insufficient evidence or invalid report') => {
-    const report = pendingReports.find(r => r.id === reportId);
-    if (!report) return;
-
-    // Remove from pending
-    setPendingReports(prev => prev.filter(r => r.id !== reportId));
-
-    // Update stats
-    setStats(prev => ({
-      ...prev,
-      pendingReports: Math.max(0, prev.pendingReports - 1)
-    }));
-
-    // Log action
-    addAuditLog('Rejected', report.id, `Rejected report: ${reason}`);
-  };
-
-  // Action: Edit Managed Report
-  const updateManagedReport = (updatedReport) => {
-    setManagedReports(prev =>
-      prev.map(r => (r.id === updatedReport.id ? updatedReport : r))
-    );
-
-    // Log action
-    addAuditLog(
-      'Edited',
-      updatedReport.id,
-      `Updated details, severity (${updatedReport.severity}), and status (${updatedReport.status})`
-    );
-  };
-
-  // Action: Publish Managed Report
-  const publishManagedReport = (reportId) => {
-    setManagedReports(prev =>
-      prev.map(r => (r.id === reportId ? { ...r, status: 'Published' } : r))
-    );
-
-    addAuditLog('Published', reportId, `Published report to community public feed`);
-  };
-
-  return (
-    <AdminContext.Provider
-      value={{
-        isDarkMode,
-        toggleTheme,
-        language,
-        changeLanguage,
-        isAuthenticated,
-        admin,
-        login,
-        logout,
-        currentPath,
-        navigateTo,
-        stats,
-        scanActivityData,
-        reportDistributionData,
-        pendingReports,
-        managedReports,
-        users,
-        userStats,
-        auditLogs,
-        approveReport,
-        rejectReport,
-        updateManagedReport,
-        publishManagedReport
-      }}
-    >
-      {children}
-    </AdminContext.Provider>
-  );
+  return <AdminContext.Provider value={contextValue}>{children}</AdminContext.Provider>;
 };
 
 export default AdminProvider;

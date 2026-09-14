@@ -11,12 +11,19 @@ export const ReportReviewCard = ({
       
       {/* Evidence Thumbnail with ID Badge */}
       <div className="relative md:w-64 h-48 md:h-auto rounded-xl overflow-hidden bg-slate-100 dark:bg-[#132248] shrink-0 border border-slate-200/60 dark:border-[#1e3568]">
-        <img
-          src={report.evidenceImage}
-          alt={report.title}
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
+        {report.evidenceImage ? (
+          <img
+            src={report.evidenceImage}
+            alt={report.title}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-linear-to-br from-[#012475] to-[#4b9efe] text-white">
+            <i className="fa-solid fa-shield-halved text-3xl"></i>
+            <span className="text-[10px] font-bold uppercase tracking-widest">Digital evidence</span>
+          </div>
+        )}
         <div className="absolute top-3 left-3 bg-[#012475]/90 backdrop-blur-xs text-white text-xs font-mono font-bold px-2.5 py-1 rounded-lg shadow-sm border border-[#4b9efe]/30">
           {report.id}
         </div>

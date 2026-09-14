@@ -10,19 +10,18 @@ export const AuditLog = () => {
   const [selectedAdmin, setSelectedAdmin] = useState('All');
   const [selectedAction, setSelectedAction] = useState('All');
   const [selectedDate, setSelectedDate] = useState('All');
+  const [filterNow] = useState(() => Date.now());
 
   const adminOptions = [
     { value: 'All', label: 'Admin: All Admins' },
-    { value: 'Sokha Admin', label: 'Sokha Admin' },
-    { value: 'Dara Mod', label: 'Dara Mod' }
+    ...[...new Set(auditLogs.map((log) => log.admin))].map((admin) => ({ value: admin, label: admin }))
   ];
 
   const actionOptions = [
     { value: 'All', label: 'Action: All Actions' },
     { value: 'Approved', label: 'Approved' },
     { value: 'Rejected', label: 'Rejected' },
-    { value: 'Published', label: 'Published' },
-    { value: 'Edited', label: 'Edited' }
+    { value: 'Published', label: 'Published' }
   ];
 
   const dateOptions = [
@@ -43,7 +42,15 @@ export const AuditLog = () => {
     const matchesAction =
       selectedAction === 'All' || log.action.toLowerCase() === selectedAction.toLowerCase();
 
-    return matchesSearch && matchesAdmin && matchesAction;
+    const occurredAt = new Date(log.occurredAt);
+    const cutoff = selectedDate === 'today'
+      ? new Date(new Date(filterNow).setHours(0, 0, 0, 0))
+      : selectedDate === 'week'
+        ? new Date(filterNow - 7 * 24 * 60 * 60 * 1000)
+        : null;
+    const matchesDate = !cutoff || occurredAt >= cutoff;
+
+    return matchesSearch && matchesAdmin && matchesAction && matchesDate;
   });
 
   return (
@@ -68,7 +75,7 @@ export const AuditLog = () => {
             Audit Log
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-            Chronological record of all administrative actions and moderation events
+            Chronological record of report review and publication events
           </p>
         </div>
       </div>

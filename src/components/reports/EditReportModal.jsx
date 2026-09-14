@@ -1,27 +1,9 @@
 import { useState, useEffect } from 'react';
-import Dropdown from '../common/Dropdown';
-
-const categoryOptions = [
-  'Online Shopping Scam',
-  'Investment Fraud',
-  'Phishing SMS/Email',
-  'Fake Recruitment',
-  'Impersonation',
-  'Charity Fraud',
-  'Lottery/Prize Scam'
-];
-
-const severityOptions = ['Critical', 'High', 'Medium', 'Low'];
-const statusOptions = ['Approved', 'Published'];
 
 const EditReportForm = ({ report, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     title: report?.title || '',
-    description: report?.description || '',
-    category: report?.category || 'Online Shopping Scam',
-    severity: report?.severity || 'High',
-    status: report?.status || 'Approved',
-    location: report?.location || 'Phnom Penh'
+    description: report?.description || ''
   });
 
   const handleSubmit = (e) => {
@@ -63,63 +45,9 @@ const EditReportForm = ({ report, onClose, onSave }) => {
         />
       </div>
 
-      {/* Category & Severity Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-            Category
-          </label>
-          <Dropdown
-            options={categoryOptions}
-            value={formData.category}
-            onChange={(val) => setFormData({ ...formData, category: val })}
-            className="w-full"
-            buttonClassName="w-full justify-between"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-            Severity
-          </label>
-          <Dropdown
-            options={severityOptions}
-            value={formData.severity}
-            onChange={(val) => setFormData({ ...formData, severity: val })}
-            className="w-full"
-            buttonClassName="w-full justify-between"
-          />
-        </div>
-      </div>
-
-      {/* Status & Location Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-            Status
-          </label>
-          <Dropdown
-            options={statusOptions}
-            value={formData.status}
-            onChange={(val) => setFormData({ ...formData, status: val })}
-            className="w-full"
-            buttonClassName="w-full justify-between"
-          />
-        </div>
-
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
-            Location
-          </label>
-          <input
-            type="text"
-            value={formData.location}
-            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-            placeholder="e.g. Phnom Penh"
-            className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-[#1e3568] bg-white dark:bg-[#101e40] text-slate-900 dark:text-white focus:outline-none focus:border-[#4b9efe] focus:ring-2 focus:ring-[#4b9efe]/20"
-          />
-        </div>
-      </div>
+      <p className="rounded-xl border border-sky-200 bg-sky-50 px-3.5 py-2.5 text-xs text-sky-700 dark:border-sky-900/50 dark:bg-sky-950/30 dark:text-sky-300">
+        Risk, category, and evidence values come from the original scan and cannot be rewritten by an administrator.
+      </p>
 
       {/* Footer Actions */}
       <div className="pt-4 mt-6 border-t border-slate-100 dark:border-[#1e3568]/60 flex items-center justify-end gap-3">

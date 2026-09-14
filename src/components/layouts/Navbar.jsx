@@ -211,7 +211,7 @@ export const Navbar = () => {
                 className="w-7 h-7 rounded-lg object-cover"
               />
               <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                Sokha
+                {admin.name?.split(' ')[0] || 'Admin'}
               </span>
               <i className={`fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform ${isAdminOpen ? 'rotate-180' : ''}`}></i>
             </button>
