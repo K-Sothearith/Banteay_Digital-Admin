@@ -8,6 +8,7 @@ import ReportReview from './pages/ReportReview';
 import ReportManagement from './pages/ReportManagement';
 import Users from './pages/Users';
 import AuditLog from './pages/AuditLog';
+import SafetyKnowledge from './pages/SafetyKnowledge';
 
 const AppRoutes = () => {
   const { currentPath, isAuthenticated, authReady, navigateTo } = useAdmin();
@@ -56,6 +57,8 @@ const AppRoutes = () => {
         return <Users />;
       case '/admin/audit-log':
         return <AuditLog />;
+      case '/admin/community-safety':
+        return <SafetyKnowledge />;
       default:
         return <Dashboard />;
     }

@@ -52,6 +52,11 @@ const api = {
     publishReport: (id, data) => jsonRequest(`/v1/admin/reports/${encodeURIComponent(id)}/publish`, 'POST', data),
     users: () => request('/v1/admin/users?limit=100'),
     auditLogs: () => request('/v1/admin/audit-logs?limit=100'),
+    safetyKnowledge: () => request('/v1/admin/safety-knowledge?limit=100'),
+    createSafetyKnowledge: (data) => jsonRequest('/v1/admin/safety-knowledge', 'POST', data),
+    updateSafetyKnowledge: (id, data) => jsonRequest(`/v1/admin/safety-knowledge/${encodeURIComponent(id)}`, 'PATCH', data),
+    publishSafetyKnowledge: (id, isPublished) => jsonRequest(`/v1/admin/safety-knowledge/${encodeURIComponent(id)}/publish`, 'PATCH', { isPublished }),
+    deleteSafetyKnowledge: (id) => request(`/v1/admin/safety-knowledge/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   },
 };
 

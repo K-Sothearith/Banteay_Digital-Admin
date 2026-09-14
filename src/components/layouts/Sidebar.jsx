@@ -35,6 +35,12 @@ export const Sidebar = () => {
       path: '/admin/users',
       iconSrc: Users_Icon,
       faIcon: 'fa-solid fa-users'
+    },
+    {
+      name: 'Community Safety',
+      path: '/admin/community-safety',
+      iconSrc: ReportManagement_Icon,
+      faIcon: 'fa-solid fa-shield-halved'
     }
   ];
 
