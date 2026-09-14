@@ -50,6 +50,8 @@ const api = {
     rejectReport: (id, reviewNote) => jsonRequest(`/v1/admin/reports/${encodeURIComponent(id)}/reject`, 'PATCH', { reviewNote: reviewNote || null }),
     updateReport: (id, data) => jsonRequest(`/v1/admin/reports/${encodeURIComponent(id)}`, 'PATCH', data),
     publishReport: (id, data) => jsonRequest(`/v1/admin/reports/${encodeURIComponent(id)}/publish`, 'POST', data),
+    setReportPublication: (id, isPublished) => jsonRequest(`/v1/admin/reports/${encodeURIComponent(id)}/publication`, 'PATCH', { isPublished }),
+    deleteReport: (id) => request(`/v1/admin/reports/${encodeURIComponent(id)}`, { method: 'DELETE' }),
     users: () => request('/v1/admin/users?limit=100'),
     auditLogs: () => request('/v1/admin/audit-logs?limit=100'),
     safetyKnowledge: () => request('/v1/admin/safety-knowledge?limit=100'),

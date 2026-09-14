@@ -43,7 +43,9 @@ const reportView = (report) => {
   const scan = report.scan || {};
   const submitterName = displayName(report.user, 'Anonymous reporter');
   const category = scan.scamCaseMatches?.[0]?.scamCase?.scamType || titleCase(scan.inputType || 'Scam report');
-  const status = report.communityPost ? 'Published' : titleCase(report.status);
+  const hasCommunityPost = Boolean(report.communityPost);
+  const isPublished = Boolean(report.communityPost?.isPublished);
+  const status = isPublished ? 'Published' : hasCommunityPost ? 'Unpublished' : titleCase(report.status);
   return {
     ...report,
     title: report.title || `Scam report ${report.id.slice(-6)}`,
@@ -51,12 +53,16 @@ const reportView = (report) => {
     category,
     severity: riskFor(scan.assessment),
     status,
+    hasCommunityPost,
+    isPublished,
     aiResult: titleCase(scan.assessment || 'Pending analysis'),
     confidence: Math.max(0, Math.min(100, Number(scan.score) || 0)),
     evidenceImage: null,
-    publishedDate: report.communityPost?.publishedAt
+    publishedDate: isPublished
       ? `Published ${formatDate(report.communityPost.publishedAt)}`
-      : `Approved ${formatDate(report.reviewedAt)}`,
+      : hasCommunityPost
+        ? `Unpublished ${formatDate(report.communityPost.updatedAt)}`
+        : `Approved ${formatDate(report.reviewedAt)}`,
     location: null,
     submitter: {
       name: submitterName,
@@ -222,11 +228,17 @@ export const AdminProvider = ({ children }) => {
   };
 
   const refreshDashboardAndAudit = async () => {
-    const [dashboard, auditResponse] = await Promise.all([api.admin.dashboard(), api.admin.auditLogs()]);
+    const [dashboard, auditResponse, userResponse] = await Promise.all([
+      api.admin.dashboard(),
+      api.admin.auditLogs(),
+      api.admin.users(),
+    ]);
     setStats(dashboard.stats);
     setScanActivityData(dashboard.scanActivityData);
     setReportDistributionData(dashboard.reportDistributionData);
     setAuditLogs(auditResponse.logs.map(auditView));
+    setUsers(userResponse.users.map(userView));
+    setUserStats(userResponse.stats);
   };
 
   const runAction = async (action) => {
@@ -266,13 +278,26 @@ export const AdminProvider = ({ children }) => {
     setManagedReports((current) => current.map((item) => item.id === report.id ? reportView(report) : item));
   });
 
-  const publishManagedReport = (reportId) => runAction(async () => {
+  const setManagedReportPublication = (reportId, isPublished) => runAction(async () => {
     const report = managedReports.find(({ id }) => id === reportId);
-    if (!report || report.status === 'Published') return;
-    const content = report.description.trim();
-    const summary = content.slice(0, 500);
-    const response = await api.admin.publishReport(reportId, { title: report.title, summary, content });
+    if (!report || report.isPublished === isPublished) return;
+
+    let response;
+    if (isPublished && !report.hasCommunityPost) {
+      const content = report.description.trim();
+      const summary = content.slice(0, 500);
+      response = await api.admin.publishReport(reportId, { title: report.title, summary, content });
+    } else {
+      response = await api.admin.setReportPublication(reportId, isPublished);
+    }
+
     setManagedReports((current) => current.map((item) => item.id === reportId ? reportView(response.report) : item));
+    await refreshDashboardAndAudit();
+  });
+
+  const deleteManagedReport = (reportId) => runAction(async () => {
+    await api.admin.deleteReport(reportId);
+    setManagedReports((current) => current.filter(({ id }) => id !== reportId));
     await refreshDashboardAndAudit();
   });
 
@@ -302,7 +327,8 @@ export const AdminProvider = ({ children }) => {
     approveReport,
     rejectReport,
     updateManagedReport,
-    publishManagedReport,
+    setManagedReportPublication,
+    deleteManagedReport,
     refresh: loadAdminData,
   };
 

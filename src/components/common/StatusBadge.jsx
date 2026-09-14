@@ -10,6 +10,8 @@ export const StatusBadge = ({ status, size = 'sm', className = '' }) => {
         return 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20';
       case 'published':
         return 'bg-[#4b9efe]/10 text-[#012475] dark:text-[#4b9efe] border border-[#4b9efe]/30';
+      case 'unpublished':
+        return 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/25';
       case 'critical':
         return 'bg-red-600/10 text-red-600 dark:text-red-400 border border-red-500/30 font-semibold';
       case 'high':
@@ -46,6 +48,8 @@ export const StatusBadge = ({ status, size = 'sm', className = '' }) => {
         return 'bg-red-500';
       case 'published':
         return 'bg-[#4b9efe]';
+      case 'unpublished':
+        return 'bg-amber-500';
       case 'high':
       case 'high risk':
         return 'bg-orange-500';
