@@ -322,9 +322,18 @@ Use realistic mock reports.
 
 Possible statuses:
 - Approved
+- Unpublished
 - Published
 
-Avoid introducing unnecessary extra workflow states unless needed for the UI.
+`Approved` reports have never been published. `Unpublished` reports retain their community-post record but are hidden from public community views.
+
+Card actions:
+
+- Show either Publish or Unpublish according to the current publication state.
+- Keep Edit visible in the card action row.
+- Place permanent Delete in an overflow menu and require confirmation.
+- Unpublishing removes the post's likes and comments while keeping the approved report available to administrators.
+- Deleting permanently removes the approved report and its linked community content.
 
 ## Edit Report
 
