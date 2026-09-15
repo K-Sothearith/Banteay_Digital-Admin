@@ -16,7 +16,7 @@ export const UserTable = ({ users = [] }) => {
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-100 dark:border-[#1e3568]/60 bg-slate-50/75 dark:bg-[#0a142d]/75 text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <tr className="border-b border-slate-100 dark:border-[#1e3568]/60 bg-slate-50/75 dark:bg-[#0a142d]/75 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
               <th className="py-3.5 px-6">User</th>
               <th className="py-3.5 px-6 text-center">Reports</th>
               <th className="py-3.5 px-6 text-center">Published</th>

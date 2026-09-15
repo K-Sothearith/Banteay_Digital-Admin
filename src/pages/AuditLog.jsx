@@ -144,7 +144,7 @@ export const AuditLog = () => {
                   </div>
 
                   <div className="text-xs text-slate-400 flex items-center gap-1.5 whitespace-nowrap">
-                    <i className="fa-regular fa-clock text-[11px]"></i>
+                    <i className="fa-regular fa-clock text-xs"></i>
                     <span>{log.timeAgo}</span>
                     <span className="hidden sm:inline">• {log.timestamp}</span>
                   </div>

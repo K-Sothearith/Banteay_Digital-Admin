@@ -99,7 +99,7 @@ export const Navbar = () => {
                 className="w-4 h-4 object-contain dark:brightness-0 dark:invert"
               />
               <span>{language === 'km' ? 'ភាសាខ្មែរ' : 'English'}</span>
-              <i className={`fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`}></i>
+              <i className={`fa-solid fa-chevron-down text-xs text-slate-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`}></i>
             </button>
 
             {isLangOpen && (
@@ -213,7 +213,7 @@ export const Navbar = () => {
               <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 {admin.name?.split(' ')[0] || 'Admin'}
               </span>
-              <i className={`fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform ${isAdminOpen ? 'rotate-180' : ''}`}></i>
+              <i className={`fa-solid fa-chevron-down text-xs text-slate-400 transition-transform ${isAdminOpen ? 'rotate-180' : ''}`}></i>
             </button>
 
             {isAdminOpen && (
@@ -228,7 +228,7 @@ export const Navbar = () => {
                   <p className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">
                     {admin.name}
                   </p>
-                  <p className="text-[11px] text-slate-400 truncate">
+                  <p className="text-xs text-slate-400 truncate">
                     {admin.email}
                   </p>
                 </div>

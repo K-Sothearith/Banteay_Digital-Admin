@@ -21,7 +21,7 @@ export const ReportReviewCard = ({
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-linear-to-br from-[#012475] to-[#4b9efe] text-white">
             <i className="fa-solid fa-shield-halved text-3xl"></i>
-            <span className="text-[10px] font-bold uppercase tracking-widest">Digital evidence</span>
+            <span className="text-xs font-bold uppercase tracking-widest">Digital evidence</span>
           </div>
         )}
         <div className="absolute top-3 left-3 bg-[#012475]/90 backdrop-blur-xs text-white text-xs font-mono font-bold px-2.5 py-1 rounded-lg shadow-sm border border-[#4b9efe]/30">
@@ -60,13 +60,13 @@ export const ReportReviewCard = ({
             </div>
 
             <span className="flex items-center gap-1">
-              <i className="fa-regular fa-clock text-[11px]"></i>
+              <i className="fa-regular fa-clock text-xs"></i>
               <span>{report.submitter?.time}</span>
             </span>
 
             {report.submitter?.location && (
               <span className="flex items-center gap-1">
-                <i className="fa-solid fa-location-dot text-[11px] text-red-500"></i>
+                <i className="fa-solid fa-location-dot text-xs text-red-500"></i>
                 <span>{report.submitter?.location}</span>
               </span>
             )}

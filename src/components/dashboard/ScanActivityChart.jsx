@@ -92,7 +92,7 @@ export const ScanActivityChart = () => {
             <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
               Scan Activity
             </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Number of scans over time
             </p>
           </div>
@@ -110,7 +110,7 @@ export const ScanActivityChart = () => {
         {/* Highlight Metrics Strip */}
         <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-slate-50 dark:bg-[#091228] border border-slate-100 dark:border-[#1e3568]/40 mb-1">
           <div>
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Total in Period
             </span>
             <p className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100">
@@ -118,7 +118,7 @@ export const ScanActivityChart = () => {
             </p>
           </div>
           <div>
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Average Daily
             </span>
             <p className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100">
@@ -126,7 +126,7 @@ export const ScanActivityChart = () => {
             </p>
           </div>
           <div>
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Peak Volume
             </span>
             <p className="text-xs sm:text-sm font-extrabold text-[#4b9efe]">
@@ -171,7 +171,7 @@ export const ScanActivityChart = () => {
                 x={padLeft - 8}
                 y={tick.y + 4}
                 textAnchor="end"
-                className="text-[10px] fill-slate-400 dark:fill-slate-500 font-mono"
+                className="text-xs fill-slate-400 dark:fill-slate-500 font-mono"
               >
                 {tick.label}
               </text>
@@ -221,7 +221,7 @@ export const ScanActivityChart = () => {
                   x={pt.x}
                   y={height - 12}
                   textAnchor="middle"
-                  className={`text-[11px] font-medium transition-colors ${
+                  className={`text-xs font-medium transition-colors ${
                     isHovered
                       ? 'fill-[#012475] dark:fill-[#4b9efe] font-bold'
                       : 'fill-slate-400 dark:fill-slate-500'
@@ -247,7 +247,7 @@ export const ScanActivityChart = () => {
               <span className="font-mono font-bold text-[#4b9efe]">
                 {hoveredPoint.value.toLocaleString()} scans
               </span>
-              <span className="text-[10px] text-slate-300">{hoveredPoint.label}</span>
+              <span className="text-xs text-slate-300">{hoveredPoint.label}</span>
             </div>
           </div>
         )}
@@ -259,7 +259,7 @@ export const ScanActivityChart = () => {
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>Live threat scanning telemetry</span>
         </span>
-        <span className="font-mono text-[11px]">Updated 1m ago</span>
+        <span className="font-mono text-xs">Updated 1m ago</span>
       </div>
 
     </div>

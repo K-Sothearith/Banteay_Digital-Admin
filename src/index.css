@@ -23,11 +23,29 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  button { font-size: 0.875rem; line-height: 1.25rem; font-weight: 600; }
+  input, select, textarea { font-size: 1rem; line-height: 1.5rem; }
+
   .dark body,
   html.dark body {
     background-color: #070d1e;
     color: #f1f5f9;
   }
+}
+
+/* Shared application hierarchy. Prefer these semantic utilities to arbitrary
+   pixel values when adding or updating admin interface text. */
+@layer components {
+  .type-page-title { @apply text-2xl font-bold leading-tight tracking-tight sm:text-3xl; }
+  .type-section-title { @apply text-xl font-bold leading-snug tracking-tight; }
+  .type-card-title { @apply text-lg font-bold leading-snug; }
+  .type-body { @apply text-base font-normal leading-6; }
+  .type-helper { @apply text-sm font-normal leading-5; }
+  .type-nav { @apply text-sm font-medium leading-5; }
+  .type-button { @apply text-sm font-semibold leading-5; }
+  .type-label { @apply text-sm font-medium leading-5; }
+  .type-input { @apply text-base font-normal leading-6; }
+  .type-badge { @apply text-xs font-semibold leading-4; }
 }
 
 /* Custom Dropdown menu item rule per Development Handbook:

@@ -44,7 +44,7 @@ export const ReportDistributionChart = () => {
         <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">
           Report Distribution
         </h3>
-        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           Current status of all reports
         </p>
       </div>
@@ -88,7 +88,7 @@ export const ReportDistributionChart = () => {
                 ? slices[hoveredIndex].count.toLocaleString()
                 : total.toLocaleString()}
             </span>
-            <span className="text-[9px] font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
+            <span className="text-xs font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase">
               {hoveredIndex !== null
                 ? slices[hoveredIndex].name
                 : 'TOTAL'}
@@ -104,7 +104,7 @@ export const ReportDistributionChart = () => {
               type="button"
               onMouseEnter={() => setHoveredIndex(idx)}
               onMouseLeave={() => setHoveredIndex(null)}
-              className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border transition-all cursor-pointer ${
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                 hoveredIndex === idx
                   ? 'bg-slate-100 dark:bg-[#132248] border-[#4b9efe]/40 scale-105'
                   : 'bg-transparent border-slate-200/70 dark:border-[#1e3568]/60 text-slate-600 dark:text-slate-300'
@@ -122,7 +122,7 @@ export const ReportDistributionChart = () => {
 
       {/* Bottom Half: 4 Detailed Horizontal Distribution Bars */}
       <div className="pt-2.5 border-t border-slate-100 dark:border-[#1e3568]/60 space-y-1.5">
-        <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
           Status Breakdown & Quotas
         </h4>
 
@@ -143,7 +143,7 @@ export const ReportDistributionChart = () => {
                 }`}
               >
                 {/* Header row: Status Name + Count & Percent */}
-                <div className="flex items-center justify-between text-[11px] mb-1">
+                <div className="flex items-center justify-between text-xs mb-1">
                   <div className="flex items-center gap-1.5">
                     <span
                       className="w-2 h-2 rounded-full"
@@ -154,11 +154,11 @@ export const ReportDistributionChart = () => {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2 font-mono text-[11px]">
+                  <div className="flex items-center gap-2 font-mono text-xs">
                     <span className="font-extrabold text-slate-900 dark:text-white">
                       {item.count.toLocaleString()}
                     </span>
-                    <span className="text-slate-400 text-[10px] min-w-7 text-right">
+                    <span className="text-slate-400 text-xs min-w-7 text-right">
                       ({item.percent})
                     </span>
                   </div>

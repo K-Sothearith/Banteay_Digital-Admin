@@ -36,7 +36,7 @@ export const ManagedReportCard = ({ report, onEdit, onPublish }) => {
               className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#012475] hover:bg-[#012475]/90 text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-xs border border-[#012475] hover:shadow-sm"
               title={report.status === 'Published' ? 'Already published' : 'Publish to community feed'}
             >
-              <i className={`fa-solid ${report.status === 'Published' ? 'fa-check' : 'fa-paper-plane'} text-[11px] text-[#4b9efe]`}></i>
+              <i className={`fa-solid ${report.status === 'Published' ? 'fa-check' : 'fa-paper-plane'} text-xs text-[#4b9efe]`}></i>
               <span>Publish</span>
             </button>
 
@@ -91,7 +91,7 @@ export const ManagedReportCard = ({ report, onEdit, onPublish }) => {
 
         {report.location && (
           <span className="text-xs text-slate-400 flex items-center gap-1">
-            <i className="fa-solid fa-location-dot text-[10px] text-slate-400"></i>
+            <i className="fa-solid fa-location-dot text-xs text-slate-400"></i>
             {report.location}
           </span>
         )}
