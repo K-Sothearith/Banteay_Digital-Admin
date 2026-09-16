@@ -34,10 +34,10 @@ const riskFor = (assessment) => ({
   STRONG_SCAM_INDICATORS: 'Critical',
   SUSPICIOUS: 'High',
   CAUTION: 'Medium',
-  INSUFFICIENT_EVIDENCE: 'Low',
+  INSUFFICIENT_EVIDENCE: 'Unknown',
   NO_STRONG_WARNING_SIGNS: 'Low',
-  UNABLE_TO_ASSESS: 'Low',
-}[assessment] || 'Low');
+  UNABLE_TO_ASSESS: 'Unknown',
+}[assessment] || 'Unknown');
 
 const reportView = (report) => {
   const scan = report.scan || {};
@@ -56,7 +56,9 @@ const reportView = (report) => {
     hasCommunityPost,
     isPublished,
     aiResult: titleCase(scan.assessment || 'Pending analysis'),
-    confidence: Math.max(0, Math.min(100, Number(scan.score) || 0)),
+    indicatorScore: Math.max(0, Math.min(100, Number(scan.score) || 0)),
+    riskSignals: Array.isArray(scan.analysisSignals) ? scan.analysisSignals : [],
+    evidenceSufficiency: scan.evidenceSufficiency || 'INSUFFICIENT',
     evidenceImage: null,
     publishedDate: isPublished
       ? `Published ${formatDate(report.communityPost.publishedAt)}`

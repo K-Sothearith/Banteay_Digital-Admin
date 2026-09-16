@@ -48,7 +48,11 @@ export const ReportReview = () => {
       return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
-      if (selectedSort === 'risk') return b.confidence - a.confidence;
+      if (selectedSort === 'risk') {
+        const riskRank = { Critical: 4, High: 3, Medium: 2, Unknown: 1, Low: 0 };
+        return (riskRank[b.severity] || 0) - (riskRank[a.severity] || 0)
+          || (b.indicatorScore ?? b.confidence ?? 0) - (a.indicatorScore ?? a.confidence ?? 0);
+      }
       if (selectedSort === 'oldest') return a.id.localeCompare(b.id);
       return b.id.localeCompare(a.id); // newest by default
     });

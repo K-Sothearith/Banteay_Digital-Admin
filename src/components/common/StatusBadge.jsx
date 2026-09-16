@@ -16,9 +16,11 @@ export const StatusBadge = ({ status, size = 'sm', className = '' }) => {
         return 'bg-red-600/10 text-red-600 dark:text-red-400 border border-red-500/30 font-semibold';
       case 'high':
       case 'high risk':
+      case 'suspicious':
         return 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/25';
       case 'medium':
       case 'medium risk':
+      case 'caution':
         return 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20';
       case 'low':
         return 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border border-slate-500/20';
@@ -52,7 +54,12 @@ export const StatusBadge = ({ status, size = 'sm', className = '' }) => {
         return 'bg-amber-500';
       case 'high':
       case 'high risk':
+      case 'suspicious':
         return 'bg-orange-500';
+      case 'medium':
+      case 'medium risk':
+      case 'caution':
+        return 'bg-sky-500';
       default:
         return 'bg-slate-400';
     }

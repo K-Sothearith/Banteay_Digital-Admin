@@ -113,7 +113,7 @@ export const ReportDetailsModal = ({
 
             <span className="flex items-center gap-1.5 font-semibold text-[#4b9efe]">
               <i className="fa-solid fa-brain"></i>
-              <span>AI Confidence: {report.confidence}%</span>
+              <span>Rule indicator score: {report.indicatorScore ?? report.confidence ?? 0}</span>
             </span>
           </div>
 
@@ -126,6 +126,30 @@ export const ReportDetailsModal = ({
               {report.description}
             </p>
           </div>
+
+          {report.riskSignals?.length > 0 && (
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                Grounded AI risk signals
+              </h4>
+              <ul className="space-y-2">
+                {report.riskSignals.map((signal, index) => (
+                  <li
+                    key={`${signal.category}-${index}`}
+                    className="rounded-xl border border-slate-200/80 dark:border-[#1e3568]/80 p-3 text-sm text-slate-700 dark:text-slate-300"
+                  >
+                    <div className="flex flex-wrap items-center gap-2">
+                      <StatusBadge status={signal.severity} size="xs" />
+                      <span className="font-semibold">{signal.message}</span>
+                    </div>
+                    <q className="mt-2 block text-xs text-slate-500 dark:text-slate-400">
+                      {signal.evidence}
+                    </q>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Footer Actions */}

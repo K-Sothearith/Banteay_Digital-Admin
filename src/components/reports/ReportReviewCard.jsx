@@ -81,7 +81,7 @@ export const ReportReviewCard = ({
         {/* Bottom Evaluation & Action Bar */}
         <div className="mt-5 pt-4 border-t border-slate-100 dark:border-[#1e3568]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           
-          {/* AI Risk & Confidence Score */}
+          {/* AI risk and deterministic rule score */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <i className="fa-solid fa-shield-halved text-xs text-[#4b9efe]"></i>
@@ -91,18 +91,18 @@ export const ReportReviewCard = ({
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">Confidence</span>
+              <span className="text-xs text-slate-400">Rule score</span>
               <div className="w-20 h-2 bg-slate-100 dark:bg-[#132248] rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
-                    width: `${report.confidence}%`,
-                    backgroundColor: report.confidence > 90 ? '#ef4444' : '#f59e0b'
+                    width: `${report.indicatorScore ?? report.confidence ?? 0}%`,
+                    backgroundColor: (report.indicatorScore ?? report.confidence ?? 0) > 90 ? '#ef4444' : '#f59e0b'
                   }}
                 ></div>
               </div>
               <span className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">
-                {report.confidence}%
+                {report.indicatorScore ?? report.confidence ?? 0}
               </span>
             </div>
           </div>
