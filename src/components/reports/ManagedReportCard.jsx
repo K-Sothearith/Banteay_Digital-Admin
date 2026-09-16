@@ -21,6 +21,12 @@ export const ManagedReportCard = ({ report, onEdit, onPublicationChange, onReque
     };
   }, []);
 
+  const publicationLabel = report.isPublished
+    ? 'Unpublish'
+    : report.hasCommunityPost
+      ? 'Publish again'
+      : 'Publish';
+
   return (
     <div className="bg-white dark:bg-[#0c1733] rounded-2xl border border-slate-200/80 dark:border-[#1e3568]/80 shadow-xs hover:shadow-md transition-all duration-200 p-5 flex flex-col justify-between">
       
@@ -58,8 +64,7 @@ export const ManagedReportCard = ({ report, onEdit, onPublicationChange, onReque
               aria-haspopup="menu"
               aria-expanded={isMenuOpen}
             >
-              <i className={`fa-solid ${report.status === 'Published' ? 'fa-check' : 'fa-paper-plane'} text-xs text-[#4b9efe]`}></i>
-              <span>Publish</span>
+              <i className="fa-solid fa-ellipsis text-xs"></i>
             </button>
 
             {isMenuOpen && (
@@ -129,6 +134,27 @@ export const ManagedReportCard = ({ report, onEdit, onPublicationChange, onReque
             {report.location}
           </span>
         )}
+
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          <button
+            type="button"
+            onClick={() => onEdit(report)}
+            disabled={disabled}
+            className="inline-flex min-h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-[#1e3568] dark:bg-[#101e40] dark:text-slate-200 dark:hover:bg-[#132248]"
+          >
+            <i className="fa-solid fa-pen-to-square"></i>
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={() => onPublicationChange(report, !report.isPublished)}
+            disabled={disabled}
+            className={`inline-flex min-h-9 items-center gap-2 rounded-lg px-3 text-xs font-bold text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${report.isPublished ? 'bg-amber-600 hover:bg-amber-700' : 'bg-[#012475] hover:bg-[#023696] dark:bg-[#10b981] dark:hover:bg-[#059669]'}`}
+          >
+            <i className={`fa-solid ${report.isPublished ? 'fa-eye-slash' : 'fa-paper-plane'}`}></i>
+            {publicationLabel}
+          </button>
+        </div>
       </div>
 
     </div>

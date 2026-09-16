@@ -6,13 +6,13 @@ const EditReportForm = ({ report, onClose, onSave }) => {
     description: report?.description || ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave({
+    const saved = await onSave({
       ...report,
       ...formData
     });
-    onClose();
+    if (saved) onClose();
   };
 
   return (
@@ -27,6 +27,7 @@ const EditReportForm = ({ report, onClose, onSave }) => {
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           required
+          minLength={3}
           className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-[#1e3568] bg-white dark:bg-[#101e40] text-slate-900 dark:text-white focus:outline-none focus:border-[#4b9efe] focus:ring-2 focus:ring-[#4b9efe]/20"
         />
       </div>
@@ -41,6 +42,7 @@ const EditReportForm = ({ report, onClose, onSave }) => {
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
+          minLength={10}
           className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-[#1e3568] bg-white dark:bg-[#101e40] text-slate-900 dark:text-white focus:outline-none focus:border-[#4b9efe] focus:ring-2 focus:ring-[#4b9efe]/20 resize-none leading-relaxed"
         />
       </div>
