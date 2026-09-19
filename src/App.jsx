@@ -9,6 +9,7 @@ import ReportManagement from './pages/ReportManagement';
 import Users from './pages/Users';
 import AuditLog from './pages/AuditLog';
 import SafetyKnowledge from './pages/SafetyKnowledge';
+import AlertsManagement from './pages/AlertsManagement';
 
 const AppRoutes = () => {
   const { currentPath, isAuthenticated, authReady, navigateTo } = useAdmin();
@@ -59,6 +60,8 @@ const AppRoutes = () => {
         return <AuditLog />;
       case '/admin/community-safety':
         return <SafetyKnowledge />;
+      case '/admin/alerts':
+        return <AlertsManagement />;
       default:
         return <Dashboard />;
     }

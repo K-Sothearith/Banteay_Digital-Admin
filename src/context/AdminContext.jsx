@@ -48,7 +48,7 @@ const reportView = (report) => {
   const status = isPublished ? 'Published' : hasCommunityPost ? 'Unpublished' : titleCase(report.status);
   return {
     ...report,
-    title: report.title || `Scam report ${report.id.slice(-6)}`,
+    title: report.title || `Scam Report #${report.id.slice(-6)}`,
     description: report.content || scan.normalizedInput || 'No report description was provided.',
     category,
     severity: riskFor(scan.assessment),

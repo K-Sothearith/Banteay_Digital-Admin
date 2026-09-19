@@ -59,6 +59,11 @@ const api = {
     updateSafetyKnowledge: (id, data) => jsonRequest(`/v1/admin/safety-knowledge/${encodeURIComponent(id)}`, 'PATCH', data),
     publishSafetyKnowledge: (id, isPublished) => jsonRequest(`/v1/admin/safety-knowledge/${encodeURIComponent(id)}/publish`, 'PATCH', { isPublished }),
     deleteSafetyKnowledge: (id) => request(`/v1/admin/safety-knowledge/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+    alerts: () => request('/v1/admin/alerts?limit=100'),
+    createAlert: (data) => jsonRequest('/v1/admin/alerts', 'POST', data),
+    updateAlert: (id, data) => jsonRequest(`/v1/admin/alerts/${encodeURIComponent(id)}`, 'PATCH', data),
+    publishAlert: (id, isPublished) => jsonRequest(`/v1/admin/alerts/${encodeURIComponent(id)}/publish`, 'PATCH', { isPublished }),
+    deleteAlert: (id) => request(`/v1/admin/alerts/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   },
 };
 

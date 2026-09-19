@@ -52,6 +52,10 @@ export const Navbar = () => {
         return 'Users';
       case '/admin/audit-log':
         return 'Audit Log';
+      case '/admin/community-safety':
+        return 'Community Safety';
+      case '/admin/alerts':
+        return 'Alerts';
       default:
         return 'Admin Console';
     }

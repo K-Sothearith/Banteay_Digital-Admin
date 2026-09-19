@@ -41,6 +41,11 @@ export const Sidebar = () => {
       path: '/admin/community-safety',
       iconSrc: ReportManagement_Icon,
       faIcon: 'fa-solid fa-shield-halved'
+    },
+    {
+      name: 'Alerts',
+      path: '/admin/alerts',
+      faIcon: 'fa-solid fa-bell'
     }
   ];
 
@@ -70,7 +75,7 @@ export const Sidebar = () => {
           </div>
         </div>
 
-        {/* Navigation Items (Exactly 4 items per handbook) */}
+        {/* Admin navigation */}
         <nav className="p-4 space-y-1.5 mt-2">
           {navItems.map((item) => {
             const isActive = currentPath === item.path;
@@ -88,16 +93,19 @@ export const Sidebar = () => {
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-6 h-6 flex items-center justify-center transition-opacity ${isActive ? 'opacity-100' : 'opacity-70'}`}>
-                    {/* SVG Icon with CSS invert/filter for active contrast */}
-                    <img
-                      src={item.iconSrc}
-                      alt={item.name}
-                      className={`w-5 h-5 object-contain transition-all duration-150 ${
-                        isActive
-                          ? 'brightness-0 invert dark:brightness-0'
-                          : 'dark:brightness-0 dark:invert'
-                      }`}
-                    />
+                    {item.iconSrc ? (
+                      <img
+                        src={item.iconSrc}
+                        alt=""
+                        className={`w-5 h-5 object-contain transition-all duration-150 ${
+                          isActive
+                            ? 'brightness-0 invert dark:brightness-0'
+                            : 'dark:brightness-0 dark:invert'
+                        }`}
+                      />
+                    ) : (
+                      <i className={`${item.faIcon} text-base`} aria-hidden="true"></i>
+                    )}
                   </div>
                   <span className="truncate">{item.name}</span>
                 </div>
