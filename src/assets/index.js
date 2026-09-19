@@ -7,12 +7,10 @@ import Dashboard_Icon from './icons/Dashboard.svg';
 import Report_Icon from './icons/Report.svg';
 import ReportManagement_Icon from './icons/Report_Management.svg';
 import Users_Icon from './icons/Users.svg';
-import Langauage_Icon from './icons/Language_Switch.svg';
+import Language_Icon from './icons/Language_Switch.svg';
 import LightMode_Icon from './icons/Light_Mode.svg';
 import DarkMode_Icon from './icons/Dark_Mode.svg';
 import AuditLog_Icon from './icons/Audit_Log.svg';
-
-const Language_Icon = Langauage_Icon;
 
 // ------------------------- Export ------------------------------------
 export {
@@ -24,24 +22,6 @@ export {
     Report_Icon,
     ReportManagement_Icon,
     Users_Icon,
-    Langauage_Icon,
-    Language_Icon,
-    LightMode_Icon,
-    DarkMode_Icon,
-    AuditLog_Icon
-}
-
-// --------------------- Export Default --------------------------------
-export default {
-    // Logo
-    BanteayDigital_Logo,
-
-    // Icon
-    Dashboard_Icon,
-    Report_Icon,
-    ReportManagement_Icon,
-    Users_Icon,
-    Langauage_Icon,
     Language_Icon,
     LightMode_Icon,
     DarkMode_Icon,

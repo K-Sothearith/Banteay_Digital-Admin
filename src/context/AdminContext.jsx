@@ -28,7 +28,7 @@ const inlineAvatar = (name) => {
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 };
 
-const avatarFor = (user, fallbackName) => user?.avatarUrl || inlineAvatar(displayName(user, fallbackName));
+const avatarFor = (user, fallbackName) => inlineAvatar(displayName(user, fallbackName));
 
 const riskFor = (assessment) => ({
   STRONG_SCAM_INDICATORS: 'Critical',
@@ -50,6 +50,7 @@ const reportView = (report) => {
     ...report,
     title: report.title || `Scam Report #${report.id.slice(-6)}`,
     description: report.content || scan.normalizedInput || 'No report description was provided.',
+    userCase: report.details || '',
     category,
     severity: riskFor(scan.assessment),
     status,
@@ -280,6 +281,23 @@ export const AdminProvider = ({ children }) => {
     setManagedReports((current) => current.map((item) => item.id === report.id ? reportView(report) : item));
   });
 
+  const updateReportUserCase = async (reportId, details) => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const { report } = await api.admin.updateReport(reportId, { details });
+      const updated = reportView(report);
+      setPendingReports((current) => current.map((item) => item.id === reportId ? updated : item));
+      setManagedReports((current) => current.map((item) => item.id === reportId ? updated : item));
+      return updated;
+    } catch (requestError) {
+      setError(requestError.message || 'The user case could not be updated.');
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const setManagedReportPublication = (reportId, isPublished) => runAction(async () => {
     const report = managedReports.find(({ id }) => id === reportId);
     if (!report || report.isPublished === isPublished) return;
@@ -329,6 +347,7 @@ export const AdminProvider = ({ children }) => {
     approveReport,
     rejectReport,
     updateManagedReport,
+    updateReportUserCase,
     setManagedReportPublication,
     deleteManagedReport,
     refresh: loadAdminData,

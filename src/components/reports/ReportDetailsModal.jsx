@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import StatusBadge from '../common/StatusBadge';
+import UserCaseEditor from './UserCaseEditor';
 
 export const ReportDetailsModal = ({
   report,
   isOpen,
   onClose,
   onApprove,
-  onReject
+  onReject,
+  onSaveUserCase
 }) => {
   // Close on escape key
   useEffect(() => {
@@ -126,6 +128,12 @@ export const ReportDetailsModal = ({
               {report.description}
             </p>
           </div>
+
+          <UserCaseEditor
+            reportId={report.id}
+            value={report.userCase}
+            onSave={onSaveUserCase}
+          />
 
           {report.riskSignals?.length > 0 && (
             <div>

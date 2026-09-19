@@ -9,7 +9,8 @@ export const ReportReview = () => {
   const {
     pendingReports,
     approveReport,
-    rejectReport
+    rejectReport,
+    updateReportUserCase
   } = useAdmin();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,11 +42,12 @@ export const ReportReview = () => {
         report.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         report.submitter?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         report.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesUserCase = report.userCase?.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesCategory =
         selectedCategory === 'All' || report.category === selectedCategory;
 
-      return matchesSearch && matchesCategory;
+      return (matchesSearch || matchesUserCase) && matchesCategory;
     })
     .sort((a, b) => {
       if (selectedSort === 'risk') {
@@ -115,6 +117,7 @@ export const ReportReview = () => {
               onViewDetails={(rep) => setActiveModalReport(rep)}
               onApprove={approveReport}
               onReject={rejectReport}
+              onSaveUserCase={updateReportUserCase}
             />
           ))
         ) : (
@@ -139,6 +142,11 @@ export const ReportReview = () => {
         onClose={() => setActiveModalReport(null)}
         onApprove={approveReport}
         onReject={rejectReport}
+        onSaveUserCase={async (reportId, details) => {
+          const updated = await updateReportUserCase(reportId, details);
+          if (updated) setActiveModalReport(updated);
+          return updated;
+        }}
       />
     </div>
   );

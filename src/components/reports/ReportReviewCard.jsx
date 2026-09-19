@@ -1,10 +1,12 @@
 import StatusBadge from '../common/StatusBadge';
+import UserCaseEditor from './UserCaseEditor';
 
 export const ReportReviewCard = ({
   report,
   onViewDetails,
   onApprove,
-  onReject
+  onReject,
+  onSaveUserCase
 }) => {
   return (
     <div className="bg-white dark:bg-[#0c1733] rounded-2xl border border-slate-200/80 dark:border-[#1e3568]/80 shadow-xs hover:shadow-md transition-all duration-200 p-5 md:p-6 flex flex-col md:flex-row gap-6">
@@ -72,10 +74,36 @@ export const ReportReviewCard = ({
             )}
           </div>
 
-          {/* Description snippet */}
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed">
-            {report.description}
-          </p>
+          <div className="mt-4 grid gap-4">
+            <section>
+              <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">
+                Report Description &amp; Evidence Summary
+              </h4>
+              <p className="m-0 text-sm text-slate-600 dark:text-slate-300 line-clamp-3 leading-relaxed">
+                {report.description}
+              </p>
+            </section>
+
+            <UserCaseEditor
+              compact
+              reportId={report.id}
+              value={report.userCase}
+              onSave={onSaveUserCase}
+            />
+
+            {report.riskSignals?.length > 0 ? (
+              <section>
+                <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-300">
+                  Grounded AI risk signals
+                </h4>
+                <ul className="m-0 grid gap-1.5 pl-5 text-sm text-slate-600 dark:text-slate-300">
+                  {report.riskSignals.slice(0, 3).map((signal, index) => (
+                    <li key={`${signal.category}-${index}`}>{signal.message}</li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+          </div>
         </div>
 
         {/* Bottom Evaluation & Action Bar */}

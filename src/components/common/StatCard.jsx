@@ -23,11 +23,7 @@ export const StatCard = ({
         </div>
 
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center p-2 transition-colors ${iconBgColor}`}>
-          {typeof icon === 'string' && icon.startsWith('http') ? (
-            <img src={icon} alt={title} className="w-6 h-6 object-contain" />
-          ) : typeof icon === 'string' && icon.includes('<svg') ? (
-            <div dangerouslySetInnerHTML={{ __html: icon }} className="w-6 h-6" />
-          ) : typeof icon === 'string' ? (
+          {typeof icon === 'string' ? (
             <i className={`${icon} text-lg`}></i>
           ) : (
             icon
