@@ -88,8 +88,8 @@ function TopicModal({ allTopics, topic, onClose, onSave }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-xs sm:p-4">
       <div className="flex max-h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#1e3568] dark:bg-[#0c1733]">
-        <div className="flex items-start justify-between border-b border-slate-100 px-4 py-4 dark:border-[#1e3568]/60 sm:px-6">
-          <div>
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-4 py-4 dark:border-[#1e3568]/60 sm:px-6">
+          <div className="min-w-0">
             <h2 className="m-0 text-lg font-bold text-slate-900 dark:text-white">
               {topic ? 'Edit safety knowledge' : 'Create safety knowledge'}
             </h2>
@@ -97,29 +97,28 @@ function TopicModal({ allTopics, topic, onClose, onSave }) {
               English and Khmer content are both required before this item can be saved.
             </p>
           </div>
-          <button type="button" onClick={onClose} aria-label="Close" className="grid h-8 w-8 shrink-0 place-items-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-[#132248]">
-            <i className="fa-solid fa-xmark" />
-          </button>
-        </div>
-
-        <div className="border-b border-slate-100 px-4 py-3 dark:border-[#1e3568]/60 sm:px-6">
-          <div className="inline-flex rounded-xl border border-slate-200 bg-slate-50 p-1 dark:border-[#1e3568] dark:bg-[#101e40]" role="tablist" aria-label="Knowledge language">
-            {languages.map((item) => {
-              const complete = languageComplete(item);
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={activeLanguage === item.id}
-                  onClick={() => { setActiveLanguage(item.id); setError(''); }}
-                  className={`flex min-h-10 items-center gap-2 rounded-lg px-4 text-sm font-bold transition ${activeLanguage === item.id ? 'bg-[#012475] text-white shadow-sm dark:bg-[#4b9efe] dark:text-[#070d1e]' : 'text-slate-600 hover:text-[#012475] dark:text-slate-300 dark:hover:text-white'}`}
-                >
-                  <span>{item.shortLabel}</span>
-                  {complete ? <i className="fa-solid fa-circle-check text-xs text-emerald-500" aria-label="Complete" /> : null}
-                </button>
-              );
-            })}
+          <div className="flex shrink-0 items-center gap-2">
+            <div className="inline-flex rounded-xl border border-slate-200 bg-slate-50 p-1 dark:border-[#1e3568] dark:bg-[#101e40]" role="tablist" aria-label="Knowledge language">
+              {languages.map((item) => {
+                const complete = languageComplete(item);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeLanguage === item.id}
+                    onClick={() => { setActiveLanguage(item.id); setError(''); }}
+                    className={`flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-bold transition ${activeLanguage === item.id ? 'bg-[#012475] text-white shadow-sm dark:bg-[#4b9efe] dark:text-[#070d1e]' : 'text-slate-600 hover:text-[#012475] dark:text-slate-300 dark:hover:text-white'}`}
+                  >
+                    <span>{item.shortLabel}</span>
+                    {complete ? <i className="fa-solid fa-circle-check text-[10px] text-emerald-500" aria-label="Complete" /> : null}
+                  </button>
+                );
+              })}
+            </div>
+            <button type="button" onClick={onClose} aria-label="Close" className="grid h-8 w-8 shrink-0 place-items-center rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-[#132248]">
+              <i className="fa-solid fa-xmark" />
+            </button>
           </div>
         </div>
 
@@ -214,7 +213,7 @@ function TopicModal({ allTopics, topic, onClose, onSave }) {
             Publish this bilingual item
           </label>
           {error ? <p className="m-0 text-sm font-semibold text-red-600" role="alert">{error}</p> : null}
-          <div className="sticky bottom-0 -mx-4 flex justify-end gap-3 border-t border-slate-100 bg-white px-4 pt-4 dark:border-[#1e3568]/60 dark:bg-[#0c1733] sm:-mx-6 sm:px-6">
+          <div className="flex justify-end gap-3 border-t border-slate-100 pt-5 dark:border-[#1e3568]/60">
             <button type="button" onClick={onClose} className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 dark:border-[#1e3568] dark:text-slate-300">Cancel</button>
             <button disabled={saving} type="submit" className="rounded-xl bg-[#012475] px-5 py-2 text-xs font-bold text-white disabled:opacity-60 dark:bg-[#10b981]">
               {saving ? 'Saving…' : 'Save bilingual knowledge'}
@@ -307,7 +306,7 @@ export default function SafetyKnowledge() {
       {!loading && !error && visible.length ? (
         <div className="grid gap-4 lg:grid-cols-2">
           {visible.map((topic) => (
-            <article key={topic.id} className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-[#1e3568] dark:bg-[#0c1733]">
+            <article key={topic.id} className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 dark:border-[#1e3568] dark:bg-[#0c1733]">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -320,11 +319,13 @@ export default function SafetyKnowledge() {
                 </div>
                 <span className="shrink-0 text-xs text-slate-400">{dateLabel(topic.updatedAt)}</span>
               </div>
-              <p className="mb-0 mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">{topic.shortDescription}</p>
-              <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4 dark:border-[#1e3568]/60">
-                <button type="button" onClick={() => setEditing(topic)} className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 dark:border-[#1e3568] dark:text-slate-200">Edit</button>
-                <button type="button" onClick={() => togglePublication(topic)} className="rounded-lg bg-[#eaf2ff] px-3 py-2 text-xs font-bold text-[#012475] dark:bg-[#132248] dark:text-[#4b9efe]">{topic.isPublished ? 'Unpublish' : 'Publish'}</button>
-                <button type="button" onClick={() => remove(topic)} className="rounded-lg px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30">Delete</button>
+              <p className="mb-0 mt-3 line-clamp-2 min-h-12 text-sm leading-6 text-slate-500 dark:text-slate-400">{topic.shortDescription}</p>
+              <div className="mt-auto pt-4">
+                <div className="flex flex-wrap gap-2 border-t border-slate-100 pt-4 dark:border-[#1e3568]/60">
+                  <button type="button" onClick={() => setEditing(topic)} className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-700 dark:border-[#1e3568] dark:text-slate-200">Edit</button>
+                  <button type="button" onClick={() => togglePublication(topic)} className="rounded-lg bg-[#eaf2ff] px-3 py-2 text-xs font-bold text-[#012475] dark:bg-[#132248] dark:text-[#4b9efe]">{topic.isPublished ? 'Unpublish' : 'Publish'}</button>
+                  <button type="button" onClick={() => remove(topic)} className="rounded-lg px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30">Delete</button>
+                </div>
               </div>
             </article>
           ))}
