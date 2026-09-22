@@ -37,7 +37,7 @@ export const ReportDistributionChart = () => {
   }, { items: [], currentOffset: 0 }).items;
 
   return (
-    <div className="bg-white dark:bg-[#0c1733] p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-[#1e3568]/80 shadow-xs flex flex-col justify-between h-full min-h-[390px] max-h-[460px]">
+    <div className="flex h-full min-h-[350px] flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xs dark:border-[#1e3568]/80 dark:bg-[#0c1733] sm:min-h-[390px] sm:p-5 lg:max-h-[460px]">
       
       {/* Header */}
       <div>

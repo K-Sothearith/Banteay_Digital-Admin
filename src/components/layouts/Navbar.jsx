@@ -7,7 +7,7 @@ import {
   DarkMode_Icon
 } from '../../assets';
 
-export const Navbar = () => {
+export const Navbar = ({ onMenuClick = () => {} }) => {
   const {
     isDarkMode,
     toggleTheme,
@@ -62,22 +62,31 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-3 z-20 mx-6 mb-3">
-      <div className="h-14 px-5 rounded-2xl flex items-center justify-between
+    <header className="sticky top-2 z-20 mx-4 mb-4 sm:top-3 sm:mx-6 sm:mb-3">
+      <div className="flex min-h-14 items-center justify-between gap-2 rounded-2xl px-2.5 sm:px-5
         bg-white/90 dark:bg-[#0c1733]/90 
         backdrop-blur-md 
         border border-slate-200/80 dark:border-[#1e3568]/80 
         shadow-sm shadow-[#012475]/5">
         
         {/* Left Side: Context / Title */}
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={onMenuClick}
+            aria-label="Open navigation"
+            aria-controls="admin-navigation"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-slate-200 bg-white text-[#012475] transition-colors hover:bg-slate-50 dark:border-[#1e3568] dark:bg-[#0c1733] dark:text-[#4b9efe] dark:hover:bg-[#132248] lg:hidden"
+          >
+            <i className="fa-solid fa-bars" aria-hidden="true"></i>
+          </button>
+          <span className="hidden text-sm font-semibold text-slate-500 dark:text-slate-400 sm:inline">
             Admin Console
           </span>
           {currentPath !== '/admin/dashboard' && (
             <>
-              <i className="fa-solid fa-chevron-right text-xs text-slate-300 dark:text-slate-600"></i>
-              <span className="text-sm font-bold text-[#012475] dark:text-[#4b9efe]">
+              <i className="hidden fa-solid fa-chevron-right text-xs text-slate-300 dark:text-slate-600 sm:inline"></i>
+              <span className="truncate text-sm font-bold text-[#012475] dark:text-[#4b9efe]">
                 {getPageTitle()}
               </span>
             </>
@@ -85,14 +94,15 @@ export const Navbar = () => {
         </div>
 
         {/* Right Side: Tools & Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
           
           {/* Language Switch */}
           <div className="relative" ref={langRef}>
             <button
               type="button"
               onClick={() => setIsLangOpen(prev => !prev)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-[#1e3568]
+              aria-label="Change language"
+              className="flex h-9 items-center gap-2 rounded-xl border border-slate-200 px-2 sm:px-3 dark:border-[#1e3568]
                 bg-white dark:bg-[#0c1733] 
                 hover:border-[#4b9efe]/50 text-slate-700 dark:text-slate-200 text-xs font-semibold
                 transition-all cursor-pointer shadow-2xs"
@@ -102,8 +112,8 @@ export const Navbar = () => {
                 alt="Language"
                 className="w-4 h-4 object-contain dark:brightness-0 dark:invert"
               />
-              <span>{language === 'km' ? 'ភាសាខ្មែរ' : 'English'}</span>
-              <i className={`fa-solid fa-chevron-down text-xs text-slate-400 transition-transform ${isLangOpen ? 'rotate-180' : ''}`}></i>
+              <span className="hidden md:inline">{language === 'km' ? 'ភាសាខ្មែរ' : 'English'}</span>
+              <i className={`hidden fa-solid fa-chevron-down text-xs text-slate-400 transition-transform md:inline ${isLangOpen ? 'rotate-180' : ''}`}></i>
             </button>
 
             {isLangOpen && (
@@ -181,7 +191,8 @@ export const Navbar = () => {
           <button
             type="button"
             onClick={() => navigateTo('/admin/audit-log')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer shadow-2xs
+            aria-label="Audit log"
+            className={`flex h-9 items-center gap-2 rounded-xl border px-2 text-xs font-semibold transition-all cursor-pointer shadow-2xs sm:px-3
               ${
                 currentPath === '/admin/audit-log'
                   ? 'bg-[#012475] text-white border-[#012475] dark:bg-[#4b9efe] dark:text-[#070d1e] dark:border-[#4b9efe]'
@@ -197,7 +208,7 @@ export const Navbar = () => {
                   : 'dark:brightness-0 dark:invert'
               }`}
             />
-            <span>Audit Log</span>
+            <span className="hidden xl:inline">Audit Log</span>
           </button>
 
           {/* Admin Dropdown with Logout */}
@@ -205,7 +216,8 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsAdminOpen(prev => !prev)}
-              className="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1 rounded-xl border border-slate-200 dark:border-[#1e3568]
+              aria-label="Open administrator menu"
+              className="flex h-9 items-center gap-2.5 rounded-xl border border-slate-200 p-1 pr-1 sm:pr-2.5 dark:border-[#1e3568]
                 bg-white dark:bg-[#0c1733] 
                 hover:border-[#4b9efe]/50 transition-all cursor-pointer shadow-2xs"
             >
@@ -214,10 +226,10 @@ export const Navbar = () => {
                 alt={admin.name}
                 className="w-7 h-7 rounded-lg object-cover"
               />
-              <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+              <span className="hidden text-xs font-bold text-slate-800 dark:text-slate-200 xl:inline">
                 {admin.name?.split(' ')[0] || 'Admin'}
               </span>
-              <i className={`fa-solid fa-chevron-down text-xs text-slate-400 transition-transform ${isAdminOpen ? 'rotate-180' : ''}`}></i>
+              <i className={`hidden fa-solid fa-chevron-down text-xs text-slate-400 transition-transform xl:inline ${isAdminOpen ? 'rotate-180' : ''}`}></i>
             </button>
 
             {isAdminOpen && (

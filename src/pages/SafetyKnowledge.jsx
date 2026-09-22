@@ -86,9 +86,9 @@ function TopicModal({ allTopics, topic, onClose, onSave }) {
   const field = (name) => localizedKey(name, language);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 backdrop-blur-xs sm:p-4">
-      <div className="flex max-h-[94vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#1e3568] dark:bg-[#0c1733]">
-        <div className="flex items-start justify-between gap-3 border-b border-slate-100 px-4 py-4 dark:border-[#1e3568]/60 sm:px-6">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-xs sm:items-center sm:p-4">
+      <div className="flex max-h-[96dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#1e3568] dark:bg-[#0c1733] sm:max-h-[94vh] sm:rounded-2xl">
+        <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 dark:border-[#1e3568]/60 min-[480px]:flex-row min-[480px]:items-start min-[480px]:justify-between sm:px-6">
           <div className="min-w-0">
             <h2 className="m-0 text-lg font-bold text-slate-900 dark:text-white">
               {topic ? 'Edit safety knowledge' : 'Create safety knowledge'}
@@ -97,7 +97,7 @@ function TopicModal({ allTopics, topic, onClose, onSave }) {
               English and Khmer content are both required before this item can be saved.
             </p>
           </div>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center justify-between gap-2 min-[480px]:justify-start">
             <div className="inline-flex rounded-xl border border-slate-200 bg-slate-50 p-1 dark:border-[#1e3568] dark:bg-[#101e40]" role="tablist" aria-label="Knowledge language">
               {languages.map((item) => {
                 const complete = languageComplete(item);
@@ -213,9 +213,9 @@ function TopicModal({ allTopics, topic, onClose, onSave }) {
             Publish this bilingual item
           </label>
           {error ? <p className="m-0 text-sm font-semibold text-red-600" role="alert">{error}</p> : null}
-          <div className="flex justify-end gap-3 border-t border-slate-100 pt-5 dark:border-[#1e3568]/60">
+          <div className="grid grid-cols-2 gap-3 border-t border-slate-100 pt-5 dark:border-[#1e3568]/60 sm:flex sm:justify-end">
             <button type="button" onClick={onClose} className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700 dark:border-[#1e3568] dark:text-slate-300">Cancel</button>
-            <button disabled={saving} type="submit" className="rounded-xl bg-[#012475] px-5 py-2 text-xs font-bold text-white disabled:opacity-60 dark:bg-[#10b981]">
+            <button disabled={saving} type="submit" className="rounded-xl bg-[#012475] px-3 py-2 text-xs font-bold text-white disabled:opacity-60 dark:bg-[#10b981] sm:px-5">
               {saving ? 'Saving…' : 'Save bilingual knowledge'}
             </button>
           </div>
@@ -286,7 +286,7 @@ export default function SafetyKnowledge() {
           <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">Community Safety</h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Create and manage bilingual safety knowledge for community members.</p>
         </div>
-        <button type="button" onClick={() => setEditing(null)} className="rounded-xl bg-[#012475] px-4 py-2.5 text-sm font-bold text-white shadow-sm dark:bg-[#4b9efe] dark:text-[#070d1e]">
+        <button type="button" onClick={() => setEditing(null)} className="w-full rounded-xl bg-[#012475] px-4 py-2.5 text-sm font-bold text-white shadow-sm dark:bg-[#4b9efe] dark:text-[#070d1e] sm:w-auto">
           <i className="fa-solid fa-plus mr-2" />New knowledge
         </button>
       </div>
@@ -306,9 +306,9 @@ export default function SafetyKnowledge() {
       {!loading && !error && visible.length ? (
         <div className="grid gap-4 lg:grid-cols-2">
           {visible.map((topic) => (
-            <article key={topic.id} className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 dark:border-[#1e3568] dark:bg-[#0c1733]">
-              <div className="flex items-start justify-between gap-3">
-                <div>
+            <article key={topic.id} className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-4 dark:border-[#1e3568] dark:bg-[#0c1733] sm:p-5">
+              <div className="flex flex-col gap-2 min-[480px]:flex-row min-[480px]:items-start min-[480px]:justify-between min-[480px]:gap-3">
+                <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="m-0 text-base font-bold text-slate-900 dark:text-white">{topic.title}</h2>
                     <span className="rounded-full bg-blue-50 px-2 py-1 text-[10px] font-black text-[#012475] dark:bg-[#132248] dark:text-[#4b9efe]">EN + ខ្មែរ</span>

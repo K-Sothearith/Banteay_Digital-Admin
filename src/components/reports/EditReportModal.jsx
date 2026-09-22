@@ -16,7 +16,7 @@ const EditReportForm = ({ report, onClose, onSave }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto p-4 sm:p-6">
       {/* Report Title */}
       <div>
         <label className="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
@@ -52,11 +52,11 @@ const EditReportForm = ({ report, onClose, onSave }) => {
       </p>
 
       {/* Footer Actions */}
-      <div className="pt-4 mt-6 border-t border-slate-100 dark:border-[#1e3568]/60 flex items-center justify-end gap-3">
+      <div className="mt-6 grid grid-cols-2 gap-3 border-t border-slate-100 pt-4 dark:border-[#1e3568]/60 sm:flex sm:items-center sm:justify-end">
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-[#1e3568]
+          className="justify-center px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-[#1e3568]
             bg-white dark:bg-[#0c1733] text-slate-700 dark:text-slate-300
             hover:bg-slate-100 dark:hover:bg-[#132248] transition-colors cursor-pointer"
         >
@@ -65,7 +65,7 @@ const EditReportForm = ({ report, onClose, onSave }) => {
 
         <button
           type="submit"
-          className="px-5 py-2 text-xs font-bold rounded-xl
+          className="justify-center px-3 py-2 text-xs font-bold rounded-xl sm:px-5
             bg-[#012475] hover:bg-[#012475]/90 text-white
             dark:bg-[#10b981] dark:hover:bg-[#10b981]/90 dark:text-white
             transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm shadow-[#012475]/20"
@@ -101,13 +101,13 @@ export const EditReportModal = ({
   if (!isOpen || !report) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-xs animate-in fade-in duration-150 sm:items-center sm:p-6">
       <div
-        className="relative w-full max-w-xl bg-white dark:bg-[#0c1733] rounded-2xl border border-slate-200 dark:border-[#1e3568] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative flex max-h-[94dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#1e3568] dark:bg-[#0c1733] sm:max-h-[90vh] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-[#1e3568]/60">
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-4 dark:border-[#1e3568]/60 sm:px-6">
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               Edit Report

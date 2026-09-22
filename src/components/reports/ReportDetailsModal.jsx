@@ -28,16 +28,16 @@ export const ReportDetailsModal = ({
   if (!isOpen || !report) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-xs animate-in fade-in duration-150 sm:items-center sm:p-6">
       
       {/* Modal Card */}
       <div
-        className="relative w-full max-w-2xl bg-white dark:bg-[#0c1733] rounded-2xl border border-slate-200 dark:border-[#1e3568] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        className="relative flex max-h-[94dvh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#1e3568] dark:bg-[#0c1733] sm:max-h-[90vh] sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-[#1e3568]/60">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-4 dark:border-[#1e3568]/60 sm:px-6">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
             <span className="font-mono text-base font-bold text-[#012475] dark:text-[#4b9efe]">
               {report.id}
             </span>
@@ -54,10 +54,10 @@ export const ReportDetailsModal = ({
         </div>
 
         {/* Scrollable Body */}
-        <div className="p-6 overflow-y-auto space-y-5">
+        <div className="space-y-5 overflow-y-auto p-4 sm:p-6">
           {/* Large Evidence Image */}
           {report.evidenceImage && (
-            <div className="w-full h-64 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 dark:border-[#1e3568]">
+            <div className="h-48 w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-900 dark:border-[#1e3568] sm:h-64">
               <img
                 src={report.evidenceImage}
                 alt={report.title}
@@ -161,11 +161,11 @@ export const ReportDetailsModal = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-100 dark:border-[#1e3568]/60 bg-slate-50/50 dark:bg-[#091228]/50">
+        <div className="grid grid-cols-3 gap-2 border-t border-slate-100 bg-slate-50/50 px-4 py-4 dark:border-[#1e3568]/60 dark:bg-[#091228]/50 sm:flex sm:items-center sm:justify-end sm:gap-3 sm:px-6">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-[#1e3568]
+            className="justify-center px-2 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-[#1e3568] sm:px-4
               bg-white dark:bg-[#0c1733] text-slate-700 dark:text-slate-300
               hover:bg-slate-100 dark:hover:bg-[#132248] transition-colors cursor-pointer"
           >
@@ -178,7 +178,7 @@ export const ReportDetailsModal = ({
               onReject(report.id);
               onClose();
             }}
-            className="px-4 py-2 text-xs font-semibold rounded-xl border border-red-200 dark:border-red-900/40
+            className="justify-center px-2 py-2 text-xs font-semibold rounded-xl border border-red-200 dark:border-red-900/40 sm:px-4
               bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400
               hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors flex items-center gap-1.5 cursor-pointer"
           >
@@ -192,7 +192,7 @@ export const ReportDetailsModal = ({
               onApprove(report.id);
               onClose();
             }}
-            className="px-5 py-2 text-xs font-bold rounded-xl
+            className="justify-center px-2 py-2 text-xs font-bold rounded-xl sm:px-5
               bg-[#012475] hover:bg-[#012475]/90 text-white
               dark:bg-[#10b981] dark:hover:bg-[#10b981]/90 dark:text-white
               transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm shadow-[#012475]/20"

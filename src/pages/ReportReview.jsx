@@ -87,7 +87,7 @@ export const ReportReview = () => {
           className="w-full sm:flex-1"
         />
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="grid w-full grid-cols-1 gap-3 min-[460px]:grid-cols-2 sm:flex sm:w-auto sm:items-center">
           <Dropdown
             options={categoryOptions}
             value={selectedCategory}

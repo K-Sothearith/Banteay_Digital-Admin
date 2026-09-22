@@ -10,7 +10,7 @@ const ConfirmationModal = ({ action, isLoading, onCancel, onConfirm }) => {
   const isDelete = action.type === 'delete';
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 p-0 backdrop-blur-xs sm:items-center sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !isLoading) onCancel();
       }}
@@ -19,9 +19,9 @@ const ConfirmationModal = ({ action, isLoading, onCancel, onConfirm }) => {
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="report-confirmation-title"
-        className="w-full max-w-md overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#1e3568] dark:bg-[#0c1733]"
+        className="w-full max-w-md overflow-hidden rounded-t-2xl border border-slate-200 bg-white shadow-2xl dark:border-[#1e3568] dark:bg-[#0c1733] sm:rounded-2xl"
       >
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${isDelete ? 'bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300'}`}>
             <i className={`fa-solid ${isDelete ? 'fa-trash-can' : 'fa-eye-slash'}`}></i>
           </div>
@@ -39,7 +39,7 @@ const ConfirmationModal = ({ action, isLoading, onCancel, onConfirm }) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/60 px-6 py-4 dark:border-[#1e3568]/60 dark:bg-[#091228]/50">
+        <div className="grid grid-cols-2 gap-3 border-t border-slate-100 bg-slate-50/60 px-4 py-4 dark:border-[#1e3568]/60 dark:bg-[#091228]/50 sm:flex sm:items-center sm:justify-end sm:px-6">
           <button
             type="button"
             onClick={onCancel}
@@ -130,7 +130,7 @@ export const ReportManagement = () => {
         />
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-[#0c1733] border border-slate-200/80 dark:border-[#1e3568] self-stretch sm:self-auto">
+        <div className="hide-scrollbar flex max-w-full items-center gap-1.5 overflow-x-auto rounded-xl border border-slate-200/80 bg-slate-100 p-1 dark:border-[#1e3568] dark:bg-[#0c1733] sm:self-auto">
           {tabs.map((tab) => {
             const isActive = activeTab === tab;
             return (
@@ -138,7 +138,7 @@ export const ReportManagement = () => {
                 key={tab}
                 type="button"
                 onClick={() => setActiveTab(tab)}
-                className={`flex-1 sm:flex-none px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`min-h-8 flex-1 whitespace-nowrap px-4 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer sm:flex-none ${
                   isActive
                     ? 'bg-[#012475] text-white shadow-xs dark:bg-[#4b9efe] dark:text-[#070d1e]'
                     : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'

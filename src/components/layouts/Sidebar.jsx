@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAdmin } from '../../context/useAdmin';
 import {
   BanteayDigital_Logo,
@@ -7,8 +8,27 @@ import {
   Users_Icon
 } from '../../assets';
 
-export const Sidebar = () => {
+export const Sidebar = ({ isOpen = false, onClose = () => {} }) => {
   const { currentPath, navigateTo, admin, pendingReports } = useAdmin();
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [isOpen, onClose]);
+
+  const handleNavigate = (path) => {
+    navigateTo(path);
+    onClose();
+  };
 
   const navItems = [
     {
@@ -50,14 +70,25 @@ export const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 h-screen fixed left-0 top-0 z-30 flex flex-col justify-between
+    <>
+      <button
+        type="button"
+        aria-label="Close navigation"
+        onClick={onClose}
+        className={`fixed inset-0 z-30 bg-slate-950/45 backdrop-blur-[2px] transition-opacity duration-200 lg:hidden ${isOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
+      />
+      <aside
+        id="admin-navigation"
+        aria-label="Admin navigation"
+        className={`fixed left-0 top-0 z-40 flex h-dvh w-[min(18rem,85vw)] flex-col justify-between
       bg-white dark:bg-[#0c1733] 
       border-r border-slate-200 dark:border-[#1e3568] 
-      transition-colors duration-200">
+      shadow-2xl transition-transform duration-200 ease-out lg:z-30 lg:w-64 lg:translate-x-0 lg:shadow-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      >
       
       {/* Top Branding Section */}
       <div>
-        <div className="p-6 flex items-center gap-3.5 border-b border-slate-100 dark:border-[#1e3568]/60">
+        <div className="flex items-center gap-3.5 border-b border-slate-100 p-5 dark:border-[#1e3568]/60 lg:p-6">
           <div className="w-11 h-11 rounded-xl overflow-hidden shadow-md shadow-[#012475]/15 border border-[#012475]/20 flex items-center justify-center bg-[#012475] shrink-0">
             <img
               src={BanteayDigital_Logo}
@@ -73,17 +104,25 @@ export const Sidebar = () => {
               Admin Console
             </span>
           </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="ml-auto grid h-9 w-9 shrink-0 place-items-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-[#132248] lg:hidden"
+          >
+            <i className="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
         </div>
 
         {/* Admin navigation */}
-        <nav className="p-4 space-y-1.5 mt-2">
+        <nav className="mt-2 space-y-1.5 overflow-y-auto p-4">
           {navItems.map((item) => {
             const isActive = currentPath === item.path;
             return (
               <button
                 key={item.path}
                 type="button"
-                onClick={() => navigateTo(item.path)}
+                onClick={() => handleNavigate(item.path)}
                 className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl font-semibold text-sm transition-all duration-150 cursor-pointer text-left
                   ${
                     isActive
@@ -148,7 +187,8 @@ export const Sidebar = () => {
           </div>
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 

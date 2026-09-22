@@ -50,7 +50,7 @@ export const Users = () => {
       </div>
 
       {/* 3 Statistic Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
+      <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3 md:gap-5">
         <StatCard
           title="Total Users"
           value={userStats.totalUsers}
@@ -82,9 +82,9 @@ export const Users = () => {
           className="w-full sm:max-w-md"
         />
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex w-full min-w-0 flex-col gap-3 sm:w-auto lg:flex-row lg:items-center">
           {/* Status Tabs */}
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 dark:bg-[#0c1733] border border-slate-200/80 dark:border-[#1e3568] flex-1 sm:flex-none">
+          <div className="hide-scrollbar flex max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-slate-200/80 bg-slate-100 p-1 dark:border-[#1e3568] dark:bg-[#0c1733] sm:flex-none">
             {statusTabs.map((tab) => {
               const isActive = statusFilter === tab;
               return (
@@ -92,7 +92,7 @@ export const Users = () => {
                   key={tab}
                   type="button"
                   onClick={() => setStatusFilter(tab)}
-                  className={`flex-1 sm:flex-none px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    className={`min-h-8 flex-1 whitespace-nowrap px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer sm:flex-none ${
                     isActive
                       ? 'bg-[#012475] text-white shadow-xs dark:bg-[#4b9efe] dark:text-[#070d1e]'
                       : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
@@ -109,7 +109,8 @@ export const Users = () => {
             options={sortOptions}
             value={sortBy}
             onChange={setSortBy}
-            buttonClassName="py-1.5 px-3 text-xs"
+            className="w-full sm:w-auto"
+            buttonClassName="w-full py-2 px-3 text-xs sm:w-auto"
             align="right"
           />
         </div>

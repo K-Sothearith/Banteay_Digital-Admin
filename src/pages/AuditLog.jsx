@@ -89,7 +89,7 @@ export const AuditLog = () => {
           className="w-full lg:flex-1"
         />
 
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full lg:w-auto">
+        <div className="grid w-full grid-cols-1 gap-3 min-[460px]:grid-cols-2 sm:flex sm:flex-wrap sm:items-center lg:w-auto lg:flex-nowrap">
           <Dropdown
             options={adminOptions}
             value={selectedAdmin}

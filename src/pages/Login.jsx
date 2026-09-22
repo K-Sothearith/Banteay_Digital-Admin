@@ -22,14 +22,14 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-[#fbfbfb] dark:bg-[#070d1e] relative overflow-hidden transition-colors duration-200">
+    <div className="relative flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden bg-[#fbfbfb] p-4 py-8 transition-colors duration-200 dark:bg-[#070d1e]">
       
       {/* Background Cyber Ambient Lights */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#4b9efe]/10 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-[#012475]/15 dark:bg-[#012475]/40 rounded-full blur-3xl pointer-events-none"></div>
 
       {/* Login Card */}
-      <div className="w-full max-w-md bg-white dark:bg-[#0c1733] rounded-3xl border border-slate-200/80 dark:border-[#1e3568]/80 shadow-xl p-8 md:p-10 relative z-10">
+      <div className="relative z-10 w-full max-w-md rounded-3xl border border-slate-200/80 bg-white p-6 shadow-xl dark:border-[#1e3568]/80 dark:bg-[#0c1733] sm:p-8 md:p-10">
         
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center mb-8">

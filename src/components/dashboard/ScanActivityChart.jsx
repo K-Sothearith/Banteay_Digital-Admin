@@ -83,7 +83,7 @@ export const ScanActivityChart = () => {
   const peakScans = maxVal;
 
   return (
-    <div className="bg-white dark:bg-[#0c1733] p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-[#1e3568]/80 shadow-xs flex flex-col justify-between h-full min-h-[390px] max-h-[460px]">
+    <div className="flex h-full min-h-[350px] flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xs dark:border-[#1e3568]/80 dark:bg-[#0c1733] sm:min-h-[390px] sm:p-5 lg:max-h-[460px]">
       
       {/* Header */}
       <div>
@@ -108,9 +108,9 @@ export const ScanActivityChart = () => {
         </div>
 
         {/* Highlight Metrics Strip */}
-        <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-slate-50 dark:bg-[#091228] border border-slate-100 dark:border-[#1e3568]/40 mb-1">
+        <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-100 bg-slate-50 p-2 dark:border-[#1e3568]/40 dark:bg-[#091228] sm:gap-2">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <span className="block text-[10px] font-semibold uppercase leading-tight tracking-wide text-slate-400 sm:text-xs sm:tracking-wider">
               Total in Period
             </span>
             <p className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100">
@@ -118,7 +118,7 @@ export const ScanActivityChart = () => {
             </p>
           </div>
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <span className="block text-[10px] font-semibold uppercase leading-tight tracking-wide text-slate-400 sm:text-xs sm:tracking-wider">
               Average Daily
             </span>
             <p className="text-xs sm:text-sm font-extrabold text-slate-800 dark:text-slate-100">
@@ -126,7 +126,7 @@ export const ScanActivityChart = () => {
             </p>
           </div>
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <span className="block text-[10px] font-semibold uppercase leading-tight tracking-wide text-slate-400 sm:text-xs sm:tracking-wider">
               Peak Volume
             </span>
             <p className="text-xs sm:text-sm font-extrabold text-[#4b9efe]">
@@ -140,7 +140,7 @@ export const ScanActivityChart = () => {
       <div className="relative w-full flex-1 flex flex-col justify-center py-2 overflow-hidden select-none">
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-full min-h-[260px] overflow-visible"
+          className="h-full min-h-[220px] w-full overflow-visible sm:min-h-[260px]"
         >
           <defs>
             <linearGradient id="cyberGradientTall" x1="0" y1="0" x2="0" y2="1">
@@ -254,7 +254,7 @@ export const ScanActivityChart = () => {
       </div>
 
       {/* Footer Info / Live Stream Indicator */}
-      <div className="pt-3 border-t border-slate-100 dark:border-[#1e3568]/50 flex items-center justify-between text-xs text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-3 text-xs text-slate-400 dark:border-[#1e3568]/50">
         <span className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>Live threat scanning telemetry</span>

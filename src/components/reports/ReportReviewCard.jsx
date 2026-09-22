@@ -9,10 +9,10 @@ export const ReportReviewCard = ({
   onSaveUserCase
 }) => {
   return (
-    <div className="bg-white dark:bg-[#0c1733] rounded-2xl border border-slate-200/80 dark:border-[#1e3568]/80 shadow-xs hover:shadow-md transition-all duration-200 p-5 md:p-6 flex flex-col md:flex-row gap-6">
+    <div className="flex flex-col gap-4 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-xs transition-all duration-200 hover:shadow-md dark:border-[#1e3568]/80 dark:bg-[#0c1733] sm:p-5 md:flex-row md:gap-6 md:p-6">
       
       {/* Evidence Thumbnail with ID Badge */}
-      <div className="relative md:w-64 h-48 md:h-auto rounded-xl overflow-hidden bg-slate-100 dark:bg-[#132248] shrink-0 border border-slate-200/60 dark:border-[#1e3568]">
+      <div className="relative h-44 shrink-0 overflow-hidden rounded-xl border border-slate-200/60 bg-slate-100 dark:border-[#1e3568] dark:bg-[#132248] sm:h-56 md:h-auto md:w-64">
         {report.evidenceImage ? (
           <img
             src={report.evidenceImage}
@@ -110,7 +110,7 @@ export const ReportReviewCard = ({
         <div className="mt-5 pt-4 border-t border-slate-100 dark:border-[#1e3568]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           
           {/* AI risk and deterministic rule score */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
             <div className="flex items-center gap-1.5">
               <i className="fa-solid fa-shield-halved text-xs text-[#4b9efe]"></i>
               <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
@@ -136,11 +136,11 @@ export const ReportReviewCard = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="grid w-full grid-cols-3 gap-2 sm:flex sm:w-auto sm:shrink-0 sm:items-center sm:gap-2.5">
             <button
               type="button"
               onClick={() => onViewDetails(report)}
-              className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-[#1e3568]
+              className="justify-center px-2 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-[#1e3568] sm:px-3.5
                 bg-white dark:bg-[#0c1733] 
                 hover:bg-slate-50 dark:hover:bg-[#132248] 
                 text-slate-700 dark:text-slate-200 
@@ -153,7 +153,7 @@ export const ReportReviewCard = ({
             <button
               type="button"
               onClick={() => onReject(report.id)}
-              className="px-3.5 py-2 text-xs font-semibold rounded-xl border border-red-200 dark:border-red-900/40
+              className="justify-center px-2 py-2 text-xs font-semibold rounded-xl border border-red-200 dark:border-red-900/40 sm:px-3.5
                 bg-red-50/50 dark:bg-red-950/20 
                 hover:bg-red-100 dark:hover:bg-red-950/40 
                 text-red-600 dark:text-red-400 
@@ -166,7 +166,7 @@ export const ReportReviewCard = ({
             <button
               type="button"
               onClick={() => onApprove(report.id)}
-              className="px-4 py-2 text-xs font-bold rounded-xl
+              className="justify-center px-2 py-2 text-xs font-bold rounded-xl sm:px-4
                 bg-[#012475] hover:bg-[#012475]/90 
                 text-white dark:bg-[#10b981] dark:hover:bg-[#10b981]/90 dark:text-white
                 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm shadow-[#012475]/20"

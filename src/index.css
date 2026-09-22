@@ -21,7 +21,10 @@
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
   }
+
+  button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
 
   button { font-size: 0.875rem; line-height: 1.25rem; font-weight: 600; }
   input, select, textarea { font-size: 1rem; line-height: 1.5rem; }
@@ -89,4 +92,12 @@
 
 .cyber-card:hover {
   border-color: rgba(75, 158, 254, 0.4);
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
